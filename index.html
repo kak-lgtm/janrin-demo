@@ -6,38 +6,58 @@
 <title>雀凛 -JANRIN- | 本格AI麻雀デモ</title>
 <meta name="theme-color" content="#1a6b3c">
 <style>
+:root{
+  --clr-felt:#1a6b3c;--clr-felt-dark:#0d3d1f;--clr-felt-deeper:#0a2e16;--clr-felt-light:#1f7a45;--clr-felt-mid:#145a30;
+  --clr-gold:#d4a017;--clr-gold-dark:#b8860b;--clr-tile:#f5f5f0;--clr-tile-border:#ddd;
+  --clr-text:#fff;--clr-text-muted:#b0c4b0;--clr-text-info:#e0e8e0;
+  --clr-man:#c0392b;--clr-pin:#2980b9;--clr-sou:#27ae60;--clr-ji:#1a1a1a;--clr-red:#e74c3c;
+  --clr-btn-gray-bg:#555;--clr-btn-gray-text:#ccc;--clr-btn-gray-border:#666;
+  --clr-btn-red:#c0392b;--clr-btn-red-alt:#a33;--clr-btn-blue:#2980b9;--clr-btn-blue-alt:#1a5276;
+  --clr-overlay:rgba(0,0,0,0.85);--clr-result-bg:#1a3a2a;
+  --min-touch:44px;
+}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;overflow:hidden;background:#1a6b3c;
-  font-family:system-ui,-apple-system,sans-serif;color:#fff;user-select:none;touch-action:manipulation}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--clr-felt);
+  font-family:system-ui,-apple-system,sans-serif;color:var(--clr-text);user-select:none;touch-action:manipulation}
+
+/* ===== prefers-reduced-motion ===== */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;
+    transition-duration:0.01ms!important;transition-delay:0ms!important}
+}
 
 /* ===== TITLE ===== */
 #title-screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,#0d3d1f,#1a6b3c,#0d3d1f);z-index:1000}
-#title-screen h1{font-size:48px;letter-spacing:12px;margin-bottom:8px;color:#f5f5f0;
+  background:linear-gradient(135deg,var(--clr-felt-dark),var(--clr-felt),var(--clr-felt-dark));z-index:1000}
+#title-screen h1{font-size:48px;letter-spacing:12px;margin-bottom:8px;color:var(--clr-tile);
   text-shadow:0 2px 8px rgba(0,0,0,0.5)}
-#title-screen .sub{font-size:14px;color:#d4a017;letter-spacing:4px;margin-bottom:32px}
-#title-screen button{background:linear-gradient(135deg,#d4a017,#b8860b);color:#fff;border:none;
+#title-screen .sub{font-size:14px;color:var(--clr-gold);letter-spacing:4px;margin-bottom:32px}
+#title-screen button{background:linear-gradient(135deg,var(--clr-gold),var(--clr-gold-dark));color:var(--clr-text);border:none;
   padding:16px 48px;font-size:16px;font-weight:bold;border-radius:6px;cursor:pointer;
-  letter-spacing:2px;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
-#title-screen button:active{transform:scale(0.97)}
+  letter-spacing:2px;box-shadow:0 4px 12px rgba(0,0,0,0.3);min-height:var(--min-touch);
+  transition:transform 0.1s,background 0.1s}
+#title-screen button:active{transform:scale(0.95);background:linear-gradient(135deg,var(--clr-gold-dark),#9a7209)}
 .hidden{display:none!important}
 
 /* ===== GAME LAYOUT ===== */
 #game-screen{display:none;width:100%;height:100%;flex-direction:column;position:relative;
-  background:radial-gradient(ellipse at center,#1f7a45,#1a6b3c 60%,#145a30)}
+  background:radial-gradient(ellipse at center,var(--clr-felt-light),var(--clr-felt) 60%,var(--clr-felt-mid))}
 
 /* info bar */
-#info-bar{height:32px;background:#0d3d1f;display:flex;align-items:center;justify-content:center;
-  gap:20px;font-size:13px;color:#ccc;flex-shrink:0;border-bottom:1px solid #0a2e16}
+#info-bar{height:32px;background:var(--clr-felt-dark);display:flex;align-items:center;justify-content:center;
+  gap:20px;font-size:13px;color:var(--clr-text-info);flex-shrink:0;border-bottom:1px solid var(--clr-felt-deeper)}
 #info-bar span{white-space:nowrap}
-#info-bar .hl{color:#d4a017;font-weight:bold}
+#info-bar .hl{color:var(--clr-gold);font-weight:bold}
+#info-bar .shanten-info{color:var(--clr-text-info);font-weight:normal}
+#info-bar .shanten-info.tenpai{color:var(--clr-gold);font-weight:bold}
+#info-bar .shanten-info.agari{color:var(--clr-red);font-weight:bold}
 
 /* main area */
 #main-area{flex:1;display:flex;flex-direction:column;position:relative;overflow:hidden;min-height:0}
 
 /* discard areas */
 .discard-zone{display:flex;flex-wrap:wrap;gap:1px;padding:2px}
-.discard-zone .tile-small{width:22px;height:30px;background:#f5f5f0;border-radius:2px;
+.discard-zone .tile-small{width:22px;height:30px;background:var(--clr-tile);border-radius:2px;
   display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;
   box-shadow:0 1px 2px rgba(0,0,0,0.3);flex-shrink:0;line-height:1}
 .discard-zone .tile-small.riichi-tile{transform:rotate(90deg);margin:0 4px}
@@ -57,9 +77,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#1a6b3c;
 #center-info{flex:1;display:flex;align-items:center;justify-content:center}
 #center-box{background:rgba(0,0,0,0.35);border-radius:8px;padding:12px 16px;text-align:center;
   min-width:120px;border:1px solid rgba(255,255,255,0.1)}
-#center-box .wind{font-size:20px;font-weight:bold;color:#d4a017;margin-bottom:4px}
-#center-box .scores{font-size:11px;line-height:1.8;color:#ccc}
-#center-box .scores .me{color:#fff;font-weight:bold}
+#center-box .wind{font-size:20px;font-weight:bold;color:var(--clr-gold);margin-bottom:4px}
+#center-box .scores{font-size:11px;line-height:1.8;color:var(--clr-text-info)}
+#center-box .scores .me{color:var(--clr-text);font-weight:bold}
 
 /* bottom discard (my discard) */
 #bottom-discard{display:flex;justify-content:center;padding:4px 0}
@@ -68,77 +88,114 @@ html,body{width:100%;height:100%;overflow:hidden;background:#1a6b3c;
 /* meld area */
 #meld-area{display:flex;justify-content:center;gap:8px;padding:2px 0;min-height:24px}
 .meld-group{display:flex;gap:1px}
-.meld-group .tile-small{width:22px;height:30px;background:#f5f5f0;border-radius:2px;
+.meld-group .tile-small{width:22px;height:30px;background:var(--clr-tile);border-radius:2px;
   display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;
   box-shadow:0 1px 2px rgba(0,0,0,0.3)}
 
 /* hand area */
 #hand-area{height:70px;background:rgba(0,0,0,0.2);display:flex;align-items:center;
   justify-content:center;gap:2px;padding:4px 8px;flex-shrink:0;border-top:1px solid rgba(0,0,0,0.3)}
-.hand-tile{width:40px;height:56px;background:#f5f5f0;border-radius:3px;
+.hand-tile{width:44px;height:58px;background:var(--clr-tile);border-radius:3px;
   display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:bold;
-  box-shadow:0 2px 4px rgba(0,0,0,0.3);cursor:pointer;transition:transform 0.1s;flex-shrink:0;line-height:1;
-  border:1px solid #ddd;position:relative}
+  box-shadow:0 2px 4px rgba(0,0,0,0.3);cursor:pointer;transition:transform 0.1s,background-color 0.1s,box-shadow 0.1s;
+  flex-shrink:0;line-height:1;border:1px solid var(--clr-tile-border);position:relative;
+  will-change:transform;min-width:var(--min-touch);min-height:var(--min-touch)}
 .hand-tile:hover{transform:translateY(-4px)}
-.hand-tile:active{transform:translateY(-6px)}
-.hand-tile.tsumo-tile{margin-left:12px;border:2px solid #d4a017}
+.hand-tile:active{transform:translateY(-2px) scale(0.95);background-color:#e8e8e0;box-shadow:0 1px 2px rgba(0,0,0,0.4)}
+.hand-tile.tsumo-tile{margin-left:12px;border:2px solid var(--clr-gold)}
 .hand-tile.disabled{opacity:0.5;pointer-events:none}
 
+/* tsumo flash on hand area */
+@keyframes tsumoFlash{
+  0%{border-color:rgba(212,160,23,0);box-shadow:none}
+  30%{border-color:rgba(212,160,23,0.8);box-shadow:inset 0 0 12px rgba(212,160,23,0.3)}
+  100%{border-color:rgba(212,160,23,0);box-shadow:none}
+}
+#hand-area.tsumo-flash{animation:tsumoFlash 0.4s ease-out;border-top:2px solid transparent}
+
+/* riichi flash on discard area */
+@keyframes riichiFlash{
+  0%{box-shadow:none}
+  30%{box-shadow:inset 0 0 20px rgba(220,50,50,0.5)}
+  100%{box-shadow:none}
+}
+.discard-zone.riichi-flash{animation:riichiFlash 0.4s ease-out}
+
 /* action buttons */
-#action-bar{height:44px;background:#0d3d1f;display:flex;align-items:center;justify-content:center;
-  gap:8px;flex-shrink:0;border-top:1px solid #0a2e16}
+#action-bar{min-height:44px;background:var(--clr-felt-dark);display:flex;align-items:center;justify-content:center;
+  gap:8px;flex-shrink:0;border-top:1px solid var(--clr-felt-deeper)}
 #action-bar button{padding:8px 20px;border:none;border-radius:4px;font-size:14px;font-weight:bold;
-  cursor:pointer;letter-spacing:1px}
-.btn-gold{background:linear-gradient(135deg,#d4a017,#b8860b);color:#fff;box-shadow:0 2px 8px rgba(212,160,23,0.4)}
-.btn-gray{background:#555;color:#ccc;border:1px solid #666}
-.btn-red{background:linear-gradient(135deg,#c0392b,#a33);color:#fff}
-.btn-blue{background:linear-gradient(135deg,#2980b9,#1a5276);color:#fff}
+  cursor:pointer;letter-spacing:1px;min-height:var(--min-touch);min-width:var(--min-touch);
+  transition:transform 0.1s,background 0.1s}
+#action-bar button:active{transform:scale(0.95)}
+.btn-gold{background:linear-gradient(135deg,var(--clr-gold),var(--clr-gold-dark));color:var(--clr-text);
+  box-shadow:0 2px 8px rgba(212,160,23,0.4)}
+.btn-gold:active{background:linear-gradient(135deg,var(--clr-gold-dark),#9a7209)}
+.btn-gray{background:var(--clr-btn-gray-bg);color:var(--clr-btn-gray-text);border:1px solid var(--clr-btn-gray-border)}
+.btn-gray:active{background:#444}
+.btn-red{background:linear-gradient(135deg,var(--clr-btn-red),var(--clr-btn-red-alt));color:var(--clr-text)}
+.btn-red:active{background:linear-gradient(135deg,#a82e22,#8a2a2a)}
+.btn-blue{background:linear-gradient(135deg,var(--clr-btn-blue),var(--clr-btn-blue-alt));color:var(--clr-text)}
+.btn-blue:active{background:linear-gradient(135deg,#1f6a99,#144560)}
 
 /* tile colors */
-.t-man{color:#c0392b}
-.t-pin{color:#2980b9}
-.t-sou{color:#27ae60}
-.t-ji{color:#1a1a1a}
-.t-red{color:#e74c3c}
+.t-man{color:var(--clr-man)}
+.t-pin{color:var(--clr-pin)}
+.t-sou{color:var(--clr-sou)}
+.t-ji{color:var(--clr-ji)}
+.t-red{color:var(--clr-red)}
 
 /* result overlay */
-#result-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;
+#result-overlay{position:fixed;inset:0;background:var(--clr-overlay);display:none;
   align-items:center;justify-content:center;z-index:500;flex-direction:column}
 #result-overlay.show{display:flex}
-#result-box{background:#1a3a2a;border:2px solid #d4a017;border-radius:12px;padding:24px 32px;
+#result-box{background:var(--clr-result-bg);border:2px solid var(--clr-gold);border-radius:12px;padding:24px 32px;
   text-align:center;max-width:400px;width:90%}
-#result-box h2{color:#d4a017;font-size:24px;margin-bottom:12px}
-#result-box .detail{color:#ccc;font-size:14px;line-height:1.8;margin-bottom:16px}
-#result-box button{background:linear-gradient(135deg,#d4a017,#b8860b);color:#fff;border:none;
-  padding:12px 32px;font-size:14px;font-weight:bold;border-radius:6px;cursor:pointer}
+#result-box h2{color:var(--clr-gold);font-size:24px;margin-bottom:12px}
+#result-box .detail{color:var(--clr-text-info);font-size:14px;line-height:1.8;margin-bottom:16px}
+#result-box button{background:linear-gradient(135deg,var(--clr-gold),var(--clr-gold-dark));color:var(--clr-text);border:none;
+  padding:12px 32px;font-size:14px;font-weight:bold;border-radius:6px;cursor:pointer;
+  min-height:var(--min-touch);transition:transform 0.1s,background 0.1s}
+#result-box button:active{transform:scale(0.95);background:linear-gradient(135deg,var(--clr-gold-dark),#9a7209)}
+
+/* agari overlay animation */
+@keyframes agariAppear{
+  from{transform:scale(0.5);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+#result-overlay.show #result-box{animation:agariAppear 0.3s ease-out}
 
 /* message overlay */
 #msg-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
   z-index:400;pointer-events:none}
 #msg-overlay.show{display:flex}
-#msg-text{background:rgba(0,0,0,0.8);color:#d4a017;font-size:28px;font-weight:bold;
+#msg-text{background:rgba(0,0,0,0.8);color:var(--clr-gold);font-size:28px;font-weight:bold;
   padding:16px 40px;border-radius:8px;letter-spacing:4px;
   animation:msgPop 0.3s ease-out}
 @keyframes msgPop{from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1}}
 
+/* footer */
+#game-footer{position:fixed;bottom:0;left:0;right:0;text-align:center;font-size:10px;
+  color:rgba(255,255,255,0.3);padding:2px 0;pointer-events:none;z-index:10}
+
 /* responsive */
 @media(max-width:600px){
   #info-bar{font-size:11px;gap:8px;height:28px}
-  .hand-tile{width:32px;height:46px;font-size:14px}
-  #hand-area{height:58px}
+  .hand-tile{width:36px;height:50px;font-size:14px;min-width:36px;min-height:44px}
+  #hand-area{height:62px}
   .discard-zone .tile-small{width:18px;height:24px;font-size:9px}
   #center-box{padding:8px 10px;min-width:90px}
   #center-box .wind{font-size:16px}
   #center-box .scores{font-size:10px}
   #action-bar button{padding:6px 14px;font-size:12px}
-  #action-bar{height:38px}
+  #action-bar{min-height:38px}
   #left-panel,#right-panel{width:55px}
 }
 @media(max-height:400px){
   #info-bar{height:24px;font-size:10px}
-  .hand-tile{width:30px;height:42px;font-size:13px}
-  #hand-area{height:50px;padding:2px 4px}
-  #action-bar{height:32px}
+  .hand-tile{width:32px;height:44px;font-size:13px;min-width:32px;min-height:44px}
+  #hand-area{height:54px;padding:2px 4px}
+  #action-bar{min-height:32px}
   #action-bar button{padding:4px 12px;font-size:11px}
   .discard-zone .tile-small{width:16px;height:22px;font-size:8px}
   #meld-area{min-height:18px}
@@ -151,7 +208,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#1a6b3c;
 <div id="title-screen">
   <h1>雀凛</h1>
   <div class="sub">- JANRIN -</div>
-  <button onclick="startGame()">対局開始</button>
+  <button onclick="startGame()" aria-label="対局を開始する">対局開始</button>
 </div>
 
 <!-- GAME SCREEN -->
@@ -161,35 +218,39 @@ html,body{width:100%;height:100%;overflow:hidden;background:#1a6b3c;
     <span id="ib-honba">0本場</span>
     <span>ドラ:<span id="ib-dora" class="hl">?</span></span>
     <span>残:<span id="ib-remaining" class="hl">70</span>枚</span>
+    <span id="ib-shanten" class="shanten-info"></span>
   </div>
   <div id="main-area">
-    <div id="top-discard"><div class="discard-zone" id="discard-2"></div></div>
+    <div id="top-discard"><div class="discard-zone" id="discard-2" role="region" aria-label="対面の捨て牌"></div></div>
     <div id="mid-row">
-      <div id="left-panel"><div class="discard-zone" id="discard-3"></div></div>
+      <div id="left-panel"><div class="discard-zone" id="discard-3" role="region" aria-label="左家の捨て牌"></div></div>
       <div id="center-info">
         <div id="center-box">
           <div class="wind" id="cb-wind">東</div>
           <div class="scores" id="cb-scores"></div>
         </div>
       </div>
-      <div id="right-panel"><div class="discard-zone" id="discard-1"></div></div>
+      <div id="right-panel"><div class="discard-zone" id="discard-1" role="region" aria-label="右家の捨て牌"></div></div>
     </div>
-    <div id="bottom-discard"><div class="discard-zone" id="discard-0"></div></div>
+    <div id="bottom-discard"><div class="discard-zone" id="discard-0" role="region" aria-label="自分の捨て牌"></div></div>
   </div>
-  <div id="meld-area"></div>
-  <div id="hand-area"></div>
-  <div id="action-bar"></div>
+  <div id="meld-area" role="group" aria-label="副露牌"></div>
+  <div id="hand-area" role="group" aria-label="手牌"></div>
+  <div id="action-bar" role="group" aria-label="アクションボタン"></div>
 </div>
 
 <!-- OVERLAYS -->
-<div id="result-overlay">
+<div id="result-overlay" role="dialog" aria-label="対局結果">
   <div id="result-box">
     <h2 id="res-title"></h2>
     <div class="detail" id="res-detail"></div>
-    <button onclick="nextRound()">次へ</button>
+    <button onclick="nextRound()" aria-label="次の局へ進む">次へ</button>
   </div>
 </div>
-<div id="msg-overlay"><div id="msg-text"></div></div>
+<div id="msg-overlay" role="status" aria-live="polite"><div id="msg-text"></div></div>
+
+<!-- FOOTER -->
+<div id="game-footer">&copy; 2026 Cross Field Inc. | 雀凛 Demo</div>
 
 <script>
 "use strict";
@@ -690,6 +751,9 @@ function renderAll() {
   document.getElementById('ib-dora').textContent = G.doraIndicators.length > 0 ? tileDisplay(G.doraIndicators[0]) : '?';
   document.getElementById('ib-remaining').textContent = remaining();
 
+  // Shanten display
+  updateShantenDisplay();
+
   // Discards
   for (let p = 0; p < 4; p++) {
     const el = document.getElementById('discard-' + p);
@@ -734,6 +798,29 @@ function renderAll() {
   renderHand();
 }
 
+function updateShantenDisplay() {
+  const el = document.getElementById('ib-shanten');
+  if (!G.hands || !G.hands[0] || G.hands[0].length === 0) {
+    el.textContent = '';
+    el.className = 'shanten-info';
+    return;
+  }
+  const hand = G.hands[0];
+  // Use 13-tile hand for shanten (exclude tsumo tile if 14 tiles)
+  const tilesForShanten = hand.length % 3 === 2 ? hand.slice(0, hand.length - 1) : hand;
+  const sh = calcShanten(tilesForShanten);
+  if (sh === -1) {
+    el.textContent = '和了!';
+    el.className = 'shanten-info agari';
+  } else if (sh === 0) {
+    el.textContent = '聴牌!';
+    el.className = 'shanten-info tenpai';
+  } else {
+    el.textContent = '向聴:' + sh;
+    el.className = 'shanten-info';
+  }
+}
+
 function renderHand() {
   const el = document.getElementById('hand-area');
   el.innerHTML = '';
@@ -744,6 +831,9 @@ function renderHand() {
     const d = document.createElement('div');
     d.className = 'hand-tile ' + tileCss(hand[i]);
     d.textContent = tileDisplay(hand[i]);
+    d.setAttribute('aria-label', tileLabel(hand[i]) + 'を打牌');
+    d.setAttribute('role', 'button');
+    d.setAttribute('tabindex', '0');
     // Mark tsumo tile
     if (has14 && i === hand.length - 1) d.classList.add('tsumo-tile');
     // Disable if not player's turn
@@ -766,6 +856,7 @@ function setButtons(btns) {
     const el = document.createElement('button');
     el.textContent = b.label;
     el.className = b.cls || 'btn-gold';
+    el.setAttribute('aria-label', b.label);
     el.onclick = b.fn;
     bar.appendChild(el);
   }
@@ -841,6 +932,23 @@ function nextRound() {
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 // ========================================
+// UI EFFECTS (non-logic)
+// ========================================
+function triggerTsumoFlash() {
+  const el = document.getElementById('hand-area');
+  el.classList.remove('tsumo-flash');
+  void el.offsetWidth; // force reflow
+  el.classList.add('tsumo-flash');
+}
+
+function triggerRiichiFlash(pIdx) {
+  const el = document.getElementById('discard-' + pIdx);
+  el.classList.remove('riichi-flash');
+  void el.offsetWidth;
+  el.classList.add('riichi-flash');
+}
+
+// ========================================
 // GAME FLOW
 // ========================================
 async function startGame() {
@@ -887,6 +995,8 @@ async function playRound() {
         return;
       }
       G.hands[p].push(tile);
+      // Tsumo flash for player
+      if (p === 0) { triggerTsumoFlash(); }
     }
     skipDraw = false;
     G.turnCount++;
@@ -934,6 +1044,7 @@ async function playRound() {
               G.scores[0] -= 1000;
               clearButtons();
               showMsg('リーチ!', 600);
+              triggerRiichiFlash(0);
               renderAll();
             }},
             { label: '打牌選択', cls: 'btn-gray', fn: () => { clearButtons(); }}
@@ -954,6 +1065,7 @@ async function playRound() {
         G.riichiDiscardIdx[p] = G.discards[p].length;
         G.scores[p] -= 1000;
         renderAll();
+        triggerRiichiFlash(p);
         await showMsg((['','右家','対面','左家'][p]) + ' リーチ!', 600);
       }
       const idx = aiDiscard(p);
@@ -1043,9 +1155,7 @@ async function playRound() {
           // After pon: took discarded tile + 2 from hand = 3 tiles in meld. Hand now has 11 tiles.
           // Player needs to discard 1 to get to 10. 10 + 3 (meld) = 13 total, correct.
           // But wait, 11 tiles means hand.length=11, which is 3*3+2. So player can discard.
-          // Let me just ensure hand has the right count for discard.
-
-          // The hand should currently have 3n+2 tiles for discard to work (our playerDiscard checks this)
+          // Let me just ensure hand has the right count for discard to work (our playerDiscard checks this)
           // After pon: hand = original 13 - 2 = 11. Is 11 % 3 === 2? 11 = 3*3+2. Yes!
 
           discardedTile = await waitForDiscard();
