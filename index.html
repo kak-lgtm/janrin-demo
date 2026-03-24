@@ -3155,15 +3155,12 @@ function renderHand() {
     if (G.selectedTile === i) div.classList.add('selected');
 
     const idx = i;
+    const tileId = t.id;
     div.addEventListener('click', (e) => {
       e.preventDefault();
       if (!G.waitingForInput || G.currentPlayer !== 0 || G.gamePhase !== 'discard') return;
       if (G.selectedTile === idx) {
-        let actualIdx;
-        if (hasTsumo) {
-          if (idx === hand.length - 1) actualIdx = p.hand.length - 1;
-          else actualIdx = p.hand.findIndex(ht => ht.id === hand[idx].id);
-        } else actualIdx = p.hand.findIndex(ht => ht.id === hand[idx].id);
+        let actualIdx = G.players[0].hand.findIndex(ht => ht.id === tileId);
         if (actualIdx >= 0) playerDiscard(actualIdx);
       } else { G.selectedTile = idx; renderHand(); }
     });
@@ -3171,7 +3168,7 @@ function renderHand() {
     div.draggable = true;
     div.addEventListener('dragstart', (e) => {
       if (!G.waitingForInput || G.currentPlayer !== 0 || G.gamePhase !== 'discard') { e.preventDefault(); return; }
-      e.dataTransfer.setData('text/plain', idx.toString());
+      e.dataTransfer.setData('text/plain', tileId.toString());
       e.dataTransfer.effectAllowed = 'move';
       div.classList.add('dragging');
       const ghost = document.getElementById('drag-ghost');
@@ -3192,13 +3189,9 @@ function renderHand() {
   const tableArea = document.getElementById('table-area');
   function handleDrop(e) {
     e.preventDefault();
-    const dragIdx = parseInt(e.dataTransfer.getData('text/plain'));
-    if (isNaN(dragIdx) || !G.waitingForInput || G.currentPlayer !== 0 || G.gamePhase !== 'discard') return;
-    let actualIdx;
-    if (hasTsumo) {
-      if (dragIdx === hand.length - 1) actualIdx = p.hand.length - 1;
-      else actualIdx = p.hand.findIndex(ht => ht.id === hand[dragIdx].id);
-    } else actualIdx = p.hand.findIndex(ht => ht.id === hand[dragIdx].id);
+    const dragTileId = parseInt(e.dataTransfer.getData('text/plain'));
+    if (isNaN(dragTileId) || !G.waitingForInput || G.currentPlayer !== 0 || G.gamePhase !== 'discard') return;
+    let actualIdx = G.players[0].hand.findIndex(ht => ht.id === dragTileId);
     if (actualIdx >= 0) playerDiscard(actualIdx);
   }
   function handleDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
