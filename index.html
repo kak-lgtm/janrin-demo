@@ -1,0 +1,3257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>雀凛 -JANRIN- | 本格AI麻雀</title>
+<meta name="description" content="美しい和モダンの世界で、AIと本格四人麻雀。ブラウザで今すぐプレイ。">
+<meta name="theme-color" content="#1C1C1E">
+
+<!-- OGP -->
+<meta property="og:title" content="雀凛 -JANRIN- | 本格AI麻雀">
+<meta property="og:description" content="美しい和モダンの世界で、AIと本格四人麻雀。ブラウザで今すぐプレイ。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://janrin.crossfield.co.jp/demo">
+<meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 1200 630'%3E%3Crect fill='%231C1C1E' width='1200' height='630'/%3E%3Crect fill='%23B8965A' x='100' y='280' width='1000' height='2' opacity='0.6'/%3E%3Ctext x='600' y='260' text-anchor='middle' fill='%23F2EDE4' font-size='96' font-family='serif' letter-spacing='16'%3E%E9%9B%80%E5%87%9B%3C/text%3E%3Ctext x='600' y='340' text-anchor='middle' fill='%23B8965A' font-size='24' font-family='sans-serif' letter-spacing='6'%3E- JANRIN -%3C/text%3E%3Ctext x='600' y='420' text-anchor='middle' fill='%23F2EDE4' font-size='20' font-family='sans-serif' opacity='0.7'%3E%E6%9C%AC%E6%A0%BCAI%E9%BA%BB%E9%9B%80%20%7C%20%E3%83%96%E3%83%A9%E3%82%A6%E3%82%B6%E3%81%A7%E4%BB%8A%E3%81%99%E3%81%90%E3%83%97%E3%83%AC%E3%82%A4%3C/text%3E%3C/svg%3E">
+<meta property="og:site_name" content="Cross Field Inc.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="雀凛 -JANRIN- | 本格AI麻雀">
+<meta name="twitter:description" content="美しい和モダンの世界で、AIと本格四人麻雀。ブラウザで今すぐプレイ。">
+
+<!-- Apple Mobile Web App -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="雀凛">
+
+<!-- PWA Manifest (inline via data URI) -->
+<link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22%E9%9B%80%E5%87%9B%20-JANRIN-%22%2C%22short_name%22%3A%22%E9%9B%80%E5%87%9B%22%2C%22description%22%3A%22%E6%9C%AC%E6%A0%BCAI%E9%BA%BB%E9%9B%80%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22landscape%22%2C%22background_color%22%3A%22%231C1C1E%22%2C%22theme_color%22%3A%22%231C1C1E%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%2520width%3D'192'%2520height%3D'192'%253E%253Crect%2520fill%3D'%25231C1C1E'%2520width%3D'192'%2520height%3D'192'%2520rx%3D'24'%2F%253E%253Ctext%2520x%3D'96'%2520y%3D'115'%2520text-anchor%3D'middle'%2520fill%3D'%2523F2EDE4'%2520font-size%3D'72'%2520font-family%3D'serif'%253E%25E9%259B%2580%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;600&family=Noto+Serif+JP:wght@900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+--bg:#1C1C1E;--bg2:#2E2E30;--white:#F2EDE4;--gold:#B8965A;--teal:#5B8A8F;
+--red:#8B1A1A;--border:#3D3D40;--highlight:#E8E0CE;--tile-base:#F0EBDB;
+--tile-back:#E8E3D0;--tile-text:#1C1010;--table:#0F0F10;
+--gold-glow:rgba(184,150,90,0.6);--gold-soft:rgba(184,150,90,0.25);
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--white);user-select:none;touch-action:manipulation}
+#app{width:100%;height:100%;position:relative;display:flex;flex-direction:column}
+
+/* ===== TITLE SCREEN ===== */
+#title-screen{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--bg);z-index:100;
+  background-image:radial-gradient(ellipse at 50% 40%, rgba(184,150,90,0.08) 0%, transparent 60%);
+  overflow:hidden;
+}
+#title-screen::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.008) 2px,rgba(255,255,255,0.008) 4px);
+  pointer-events:none;
+}
+#title-screen h1{
+  font-family:'Noto Serif JP',serif;font-size:56px;color:var(--white);
+  letter-spacing:16px;margin-bottom:4px;
+  text-shadow:0 0 40px rgba(184,150,90,0.3),0 2px 4px rgba(0,0,0,0.5);
+  animation:titleFadeIn 1.2s ease-out;
+}
+#title-screen .sub{
+  font-size:13px;color:var(--gold);letter-spacing:6px;margin-bottom:24px;
+  font-weight:300;opacity:0.85;
+  animation:titleFadeIn 1.2s ease-out 0.3s both;
+}
+#title-screen .title-line{
+  width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin-bottom:24px;animation:titleFadeIn 1.2s ease-out 0.2s both;
+}
+#title-screen .title-stats{
+  font-size:11px;color:var(--highlight);opacity:0.5;margin-bottom:24px;
+  animation:titleFadeIn 1.2s ease-out 0.4s both;text-align:center;line-height:1.8;
+}
+#title-screen button{
+  background:linear-gradient(135deg,#C4A265,#B8965A,#A68548);
+  color:var(--bg);border:none;padding:16px 56px;font-size:15px;
+  font-family:'Noto Sans JP',sans-serif;font-weight:600;border-radius:4px;
+  cursor:pointer;letter-spacing:3px;position:relative;
+  box-shadow:0 4px 24px rgba(184,150,90,0.35),inset 0 1px 0 rgba(255,255,255,0.2);
+  transition:transform 0.2s,box-shadow 0.2s;
+  animation:titleFadeIn 1.2s ease-out 0.5s both;
+}
+#title-screen button:hover{transform:translateY(-2px);box-shadow:0 6px 32px rgba(184,150,90,0.5),inset 0 1px 0 rgba(255,255,255,0.2)}
+#title-screen button:active{transform:translateY(0);box-shadow:0 2px 12px rgba(184,150,90,0.3)}
+
+.title-bottom-btns{
+  display:flex;gap:12px;margin-top:16px;
+  animation:titleFadeIn 1.2s ease-out 0.6s both;
+}
+.title-bottom-btns button{
+  background:transparent;border:1px solid rgba(184,150,90,0.3);color:var(--gold);
+  padding:8px 20px;font-size:12px;font-family:'Noto Sans JP',sans-serif;
+  border-radius:4px;cursor:pointer;letter-spacing:1px;
+  transition:background 0.2s,border-color 0.2s;
+}
+.title-bottom-btns button:hover{background:rgba(184,150,90,0.1);border-color:rgba(184,150,90,0.5)}
+
+@keyframes titleFadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.hidden{display:none!important}
+
+/* ===== RESULT SCREEN ===== */
+#result-screen{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(15,15,16,0.96);z-index:90;
+  background-image:radial-gradient(ellipse at 50% 30%, rgba(184,150,90,0.06) 0%, transparent 70%);
+  animation:resultFadeIn 0.6s ease-out;
+}
+@keyframes resultFadeIn{from{opacity:0}to{opacity:1}}
+#result-screen h2{
+  font-family:'Noto Serif JP',serif;font-size:36px;color:var(--gold);
+  margin-bottom:8px;letter-spacing:6px;
+  text-shadow:0 0 30px rgba(184,150,90,0.4);
+}
+#result-screen .result-line{
+  width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin-bottom:28px;
+}
+#result-screen .scores{margin-bottom:24px;min-width:340px}
+#result-screen .score-row{
+  display:flex;align-items:center;gap:16px;padding:12px 16px;
+  border-bottom:1px solid rgba(61,61,64,0.6);position:relative;
+  transition:background 0.2s;
+}
+#result-screen .score-row:first-child{
+  background:linear-gradient(90deg,rgba(184,150,90,0.08),transparent);
+  border-radius:4px 4px 0 0;
+}
+#result-screen .score-row .rank{
+  font-family:'Noto Serif JP',serif;font-size:28px;color:var(--gold);
+  width:44px;text-align:center;
+}
+#result-screen .score-row:first-child .rank{
+  text-shadow:0 0 12px rgba(184,150,90,0.5);
+}
+#result-screen .score-row .name{flex:1;font-weight:600;font-size:15px;letter-spacing:1px}
+#result-screen .score-row .pts{
+  font-family:'Noto Serif JP',serif;font-size:22px;color:var(--gold);
+  min-width:90px;text-align:right;
+}
+.result-share-area{display:flex;gap:10px;margin-bottom:20px}
+.result-share-area button{
+  background:transparent;border:1px solid rgba(184,150,90,0.3);color:var(--gold);
+  padding:8px 16px;font-size:12px;font-family:'Noto Sans JP',sans-serif;
+  border-radius:4px;cursor:pointer;letter-spacing:1px;transition:background 0.2s;
+}
+.result-share-area button:hover{background:rgba(184,150,90,0.1)}
+#result-screen .result-main-btn{
+  background:linear-gradient(135deg,#C4A265,#B8965A,#A68548);
+  color:var(--bg);border:none;padding:14px 48px;font-size:15px;
+  font-family:'Noto Sans JP',sans-serif;font-weight:600;border-radius:4px;
+  cursor:pointer;letter-spacing:2px;
+  box-shadow:0 4px 20px rgba(184,150,90,0.3),inset 0 1px 0 rgba(255,255,255,0.15);
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+#result-screen .result-main-btn:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(184,150,90,0.45)}
+
+/* ===== AGARI OVERLAY ===== */
+#agari-overlay{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(10,10,12,0.95);z-index:80;opacity:0;
+  transition:opacity 0.5s ease-out;pointer-events:none;
+  background-image:radial-gradient(ellipse at 50% 40%, rgba(184,150,90,0.1) 0%, transparent 60%);
+}
+#agari-overlay.show{opacity:1;pointer-events:auto}
+
+#agari-overlay.tier-normal .agari-type{
+  font-family:'Noto Serif JP',serif;font-size:52px;color:var(--gold);
+  margin-bottom:20px;letter-spacing:8px;
+  text-shadow:0 0 40px rgba(184,150,90,0.7),0 0 80px rgba(184,150,90,0.3);
+  animation:agariTextBrush 1.5s ease-out;
+}
+#agari-overlay.tier-mangan .agari-type{
+  font-family:'Noto Serif JP',serif;font-size:58px;color:var(--white);
+  margin-bottom:20px;letter-spacing:10px;
+  text-shadow:0 0 50px rgba(200,140,40,0.8),0 0 100px rgba(200,140,40,0.4);
+  animation:agariTextMangan 2s ease-out;
+}
+#agari-overlay.tier-yakuman .agari-type{
+  font-family:'Noto Serif JP',serif;font-size:64px;color:var(--white);
+  margin-bottom:20px;letter-spacing:12px;
+  text-shadow:0 0 60px rgba(150,180,220,0.9),0 0 120px rgba(184,150,90,0.5);
+  animation:agariTextYakuman 3s ease-out;
+}
+#agari-overlay .agari-type{
+  font-family:'Noto Serif JP',serif;font-size:52px;color:var(--white);
+  margin-bottom:20px;letter-spacing:8px;
+  text-shadow:0 0 40px rgba(184,150,90,0.5),0 0 80px rgba(184,150,90,0.2);
+  animation:agariTextBrush 1.5s ease-out;
+}
+
+@keyframes agariTextBrush{
+  0%{opacity:0;transform:scale(0.5);filter:blur(12px)}
+  30%{opacity:0.5;filter:blur(4px)}
+  60%{opacity:1;transform:scale(1.05);filter:blur(0)}
+  100%{transform:scale(1)}
+}
+@keyframes agariTextMangan{
+  0%{opacity:0;transform:scale(0.3) translateY(20px);filter:blur(16px)}
+  20%{opacity:0.3;filter:blur(8px)}
+  50%{opacity:1;transform:scale(1.1) translateY(0);filter:blur(0)}
+  70%{transform:scale(1.02)}
+  100%{transform:scale(1)}
+}
+@keyframes agariTextYakuman{
+  0%{opacity:0;transform:scale(0.2);filter:blur(20px);color:rgba(150,180,220,0.9)}
+  25%{opacity:0.6;filter:blur(6px);color:rgba(150,180,220,1)}
+  50%{opacity:1;transform:scale(1.15);filter:blur(0);color:var(--white)}
+  70%{transform:scale(1.03)}
+  100%{transform:scale(1)}
+}
+
+#agari-particles{
+  position:absolute;inset:0;pointer-events:none;z-index:81;
+}
+
+#agari-overlay.tier-mangan::after{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(90deg, transparent 0%, rgba(200,140,40,0.15) 30%, rgba(200,140,40,0.25) 50%, rgba(200,140,40,0.15) 70%, transparent 100%);
+  animation:orangeSweep 1.5s ease-out forwards;pointer-events:none;
+}
+@keyframes orangeSweep{
+  0%{opacity:0;transform:scaleX(0);transform-origin:left}
+  40%{opacity:1;transform:scaleX(1)}
+  100%{opacity:0}
+}
+
+#agari-overlay.tier-yakuman::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 50%, rgba(150,180,220,0.15) 0%, transparent 60%);
+  animation:yakumanGlow 3s ease-in-out forwards;pointer-events:none;
+}
+@keyframes yakumanGlow{
+  0%{opacity:0}
+  30%{opacity:1}
+  100%{opacity:0.3}
+}
+
+#agari-overlay.tier-normal .agari-hand .disc-tile,
+#agari-overlay.tier-normal .agari-hand .hand-tile{
+  box-shadow:0 0 8px rgba(184,150,90,0.5);
+}
+
+#agari-overlay .agari-hand{display:flex;gap:3px;margin-bottom:24px;flex-wrap:wrap;justify-content:center}
+#agari-overlay .yaku-list{
+  margin-bottom:20px;background:rgba(46,46,48,0.85);
+  border:1px solid rgba(184,150,90,0.5);border-radius:6px;
+  padding:16px 24px;min-width:300px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+  backdrop-filter:blur(8px);
+}
+#agari-overlay .yaku-row{display:flex;justify-content:space-between;padding:5px 0;font-size:15px}
+#agari-overlay .yaku-row .yn{color:var(--white);letter-spacing:1px}
+#agari-overlay .yaku-row .yh{color:var(--gold);font-family:'Noto Serif JP',serif}
+#agari-overlay .yaku-total{
+  border-top:1px solid rgba(184,150,90,0.4);padding-top:10px;margin-top:6px;
+  display:flex;justify-content:space-between;font-size:18px;
+}
+#agari-overlay .yaku-total .yn{color:var(--white);font-weight:600;letter-spacing:1px}
+#agari-overlay .yaku-total .yh{color:var(--gold);font-family:'Noto Serif JP',serif;font-size:26px;text-shadow:0 0 12px rgba(184,150,90,0.4)}
+#agari-overlay .agari-btn{
+  background:linear-gradient(135deg,#C4A265,#B8965A,#A68548);
+  color:var(--bg);border:none;padding:12px 40px;font-size:14px;
+  font-family:'Noto Sans JP',sans-serif;font-weight:600;border-radius:4px;
+  cursor:pointer;margin-top:16px;letter-spacing:1px;
+  box-shadow:0 4px 16px rgba(184,150,90,0.3);
+  transition:transform 0.2s;
+}
+#agari-overlay .agari-btn:hover{transform:translateY(-2px)}
+
+/* ===== GAME LAYOUT ===== */
+#game{display:flex;flex-direction:column;width:100%;height:100%;position:relative;background:var(--bg)}
+
+/* Info Bar */
+#info-bar{
+  height:40px;min-height:40px;display:flex;align-items:center;
+  background:rgba(28,28,30,0.95);border-bottom:1px solid rgba(184,150,90,0.4);
+  padding:0 14px;gap:14px;font-size:12px;z-index:10;
+  backdrop-filter:blur(4px);
+}
+#info-bar .remain{font-family:'Noto Serif JP',serif;font-size:20px;color:var(--gold);transition:color 0.3s}
+#info-bar .remain.warning{color:var(--red);animation:remainPulse 1s infinite}
+@keyframes remainPulse{0%,100%{opacity:1}50%{opacity:0.6}}
+#info-bar .remain-label{font-size:10px;color:var(--highlight);opacity:0.5;margin-right:2px;font-weight:100}
+#info-bar .round-info{border-left:1px solid var(--border);padding-left:14px;font-weight:600;letter-spacing:1px}
+#info-bar .honba{font-weight:300;font-size:11px;color:var(--highlight);opacity:0.6;margin-left:6px}
+#info-bar .kyotaku{font-weight:300;font-size:11px;color:var(--gold);opacity:0.8;margin-left:4px}
+#info-bar .dora-area{display:flex;align-items:center;gap:3px;margin-left:auto}
+#info-bar .dora-label{font-size:10px;color:var(--gold);opacity:0.6;margin-right:6px;font-weight:100;letter-spacing:2px}
+
+/* Sound toggle in info bar */
+.sound-toggle{
+  margin-left:8px;cursor:pointer;font-size:16px;opacity:0.6;
+  transition:opacity 0.2s;padding:2px 4px;
+}
+.sound-toggle:hover{opacity:1}
+/* Settings gear in info bar */
+.settings-toggle{
+  margin-left:4px;cursor:pointer;font-size:14px;opacity:0.5;
+  transition:opacity 0.2s;padding:2px 4px;
+}
+.settings-toggle:hover{opacity:0.9}
+
+/* Shanten display */
+#shanten-display{
+  font-size:11px;color:var(--teal);margin-left:8px;padding:2px 8px;
+  border:1px solid rgba(91,138,143,0.3);border-radius:3px;
+  background:rgba(91,138,143,0.08);white-space:nowrap;
+}
+#shanten-display.tenpai{color:var(--gold);border-color:rgba(184,150,90,0.4);background:rgba(184,150,90,0.1)}
+#shanten-display.agari{color:#4CAF50;border-color:rgba(76,175,80,0.4);background:rgba(76,175,80,0.1)}
+
+#machi-display{
+  font-size:10px;color:var(--gold);margin-left:4px;opacity:0.8;white-space:nowrap;
+}
+
+/* Dora tile */
+.dora-tile{
+  width:26px;height:35px;background:var(--tile-base);border-radius:2px;
+  display:flex;align-items:center;justify-content:center;font-size:11px;
+  color:var(--tile-text);font-weight:600;position:relative;
+  box-shadow:1px 1px 4px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.3);
+  background-image:linear-gradient(to bottom,rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.05) 50%,rgba(0,0,0,0.05) 100%);
+}
+.dora-tile.shown{
+  animation:doraReveal 0.4s ease-out;
+  box-shadow:1px 1px 4px rgba(0,0,0,0.5),0 0 12px rgba(184,150,90,0.3),inset 0 1px 0 rgba(255,255,255,0.3);
+}
+@keyframes doraReveal{0%{transform:rotateY(90deg)}100%{transform:rotateY(0)}}
+.dora-tile.back{background:var(--tile-back);color:transparent;background-image:none;box-shadow:1px 1px 3px rgba(0,0,0,0.3)}
+
+/* Timer bar */
+#timer-bar{
+  height:3px;min-height:3px;background:var(--bg2);position:relative;z-index:10;
+}
+#timer-progress{
+  height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));
+  width:100%;transition:width 0.5s linear;
+  box-shadow:0 0 6px rgba(91,138,143,0.4);
+}
+#timer-progress.warning{background:linear-gradient(90deg,var(--red),#A02020);box-shadow:0 0 6px rgba(139,26,26,0.5)}
+
+/* Main Area */
+#main-area{flex:1;display:flex;position:relative;overflow:hidden}
+#left-panel,#right-panel{
+  width:84px;min-width:84px;display:flex;flex-direction:column;align-items:center;
+  padding:8px 4px;background:rgba(28,28,30,0.85);
+  border-right:1px solid rgba(61,61,64,0.5);font-size:11px;gap:3px;z-index:5;
+}
+#right-panel{border-right:none;border-left:1px solid rgba(61,61,64,0.5)}
+.side-name{font-weight:600;font-size:11px;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:72px}
+.side-wind{font-size:12px;color:var(--highlight);opacity:0.7}
+.side-score{font-family:'Noto Serif JP',serif;font-size:15px;color:var(--gold);margin-top:2px}
+.side-tiles{display:flex;flex-direction:column;gap:1px;margin-top:6px}
+.side-tile-back{
+  width:14px;height:18px;background:var(--tile-back);border-radius:1px;
+  border:1px solid rgba(28,28,30,0.3);
+  box-shadow:0 1px 2px rgba(0,0,0,0.2);
+}
+.side-melds{margin-top:4px;display:flex;flex-direction:column;gap:2px;font-size:8px}
+.side-riichi-mark{color:var(--red);font-size:10px;font-weight:600;letter-spacing:2px;margin-top:4px}
+
+/* Table */
+#table-area{
+  flex:1;position:relative;background:var(--table);
+  background-image:
+    radial-gradient(ellipse 60% 50% at center, rgba(230,210,160,0.09) 0%, transparent 70%),
+    radial-gradient(circle at 50% 50%, rgba(184,150,90,0.03) 0%, transparent 50%);
+}
+#table-area::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 40% 35% at 50% 45%, rgba(255,250,230,0.04) 0%, transparent 100%);
+  pointer-events:none;z-index:1;
+  animation:spotlightBreath 4s ease-in-out infinite alternate;
+}
+@keyframes spotlightBreath{0%{opacity:0.7}100%{opacity:1}}
+
+/* Center Panel */
+#center-panel{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:116px;height:116px;
+  background:rgba(36,36,38,0.92);
+  border:1px solid rgba(184,150,90,0.5);border-radius:6px;
+  padding:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;font-size:10px;z-index:5;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4),inset 0 0 20px rgba(184,150,90,0.03);
+  backdrop-filter:blur(4px);
+}
+#center-panel .wind-big{
+  font-family:'Noto Serif JP',serif;font-size:22px;color:var(--gold);
+  font-weight:900;letter-spacing:2px;
+  text-shadow:0 0 12px rgba(184,150,90,0.3);
+}
+.cp-row{display:flex;align-items:center;gap:4px;padding:1px 6px;border-radius:3px;transition:all 0.3s}
+.cp-wind{font-size:10px;color:var(--highlight);font-weight:300;opacity:0.7}
+.cp-score{font-family:'Noto Serif JP',serif;font-size:12px;color:var(--gold)}
+.cp-active{
+  box-shadow:inset 0 0 10px rgba(184,150,90,0.2);
+  background:rgba(184,150,90,0.1);
+  border:1px solid rgba(184,150,90,0.2);
+}
+
+/* Discard Areas */
+.discard-area{position:absolute;display:flex;flex-wrap:wrap;gap:1px;z-index:3}
+#discard-self{bottom:105px;left:50%;transform:translateX(-50%);width:168px;flex-direction:row}
+#discard-opp{top:55px;left:50%;transform:translateX(-50%);width:144px;flex-direction:row}
+#discard-left{left:22px;top:50%;transform:translateY(-50%);width:96px;flex-direction:row;flex-wrap:wrap}
+#discard-right{right:22px;top:50%;transform:translateY(-50%);width:96px;flex-direction:row;flex-wrap:wrap}
+
+.disc-tile{
+  border-radius:2px;display:flex;align-items:center;justify-content:center;
+  font-weight:600;cursor:default;position:relative;
+  background-image:linear-gradient(to bottom,rgba(255,255,255,0.15) 0%,rgba(255,255,255,0.03) 50%,rgba(0,0,0,0.05) 100%);
+  box-shadow:1px 1px 3px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.2);
+  transition:box-shadow 0.2s;
+}
+#discard-self .disc-tile,#discard-opp .disc-tile{width:25px;height:34px;font-size:11px}
+#discard-left .disc-tile,#discard-right .disc-tile{width:21px;height:29px;font-size:9px}
+.disc-tile.normal{background-color:var(--tile-base);color:var(--tile-text)}
+.disc-tile.riichi-mark{background-color:var(--tile-base);color:var(--tile-text);transform:rotate(90deg);margin:0 4px}
+.disc-tile.called{opacity:0.3}
+.disc-tile.tsumogiri{filter:brightness(0.75)}
+.disc-tile.latest{
+  box-shadow:0 0 10px rgba(184,150,90,0.6),0 0 20px rgba(184,150,90,0.2),1px 1px 3px rgba(0,0,0,0.4);
+  animation:latestTileGlow 1.5s ease-in-out infinite alternate;
+}
+@keyframes latestTileGlow{0%{box-shadow:0 0 8px rgba(184,150,90,0.4),1px 1px 3px rgba(0,0,0,0.4)}100%{box-shadow:0 0 14px rgba(184,150,90,0.7),0 0 24px rgba(184,150,90,0.2),1px 1px 3px rgba(0,0,0,0.4)}}
+.disc-tile.red-tile{background-color:#F5EDE0}
+
+.disc-tile.dealing{animation:discardFly 0.25s ease-out}
+@keyframes discardFly{
+  0%{transform:translateY(30px) scale(1.2);opacity:0.3}
+  100%{transform:translateY(0) scale(1);opacity:1}
+}
+
+/* Opponent top */
+#opp-top{
+  position:absolute;top:8px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:3px;z-index:5;
+}
+#opp-top .opp-tiles{display:flex;gap:1px}
+.opp-tile-back{
+  width:14px;height:18px;background:var(--tile-back);border-radius:1px;
+  border:1px solid rgba(28,28,30,0.3);
+  box-shadow:0 1px 2px rgba(0,0,0,0.2);
+}
+#opp-top .opp-info{display:flex;align-items:center;gap:8px;font-size:11px}
+#opp-top .opp-name{font-weight:600;letter-spacing:1px}
+#opp-top .opp-score{font-family:'Noto Serif JP',serif;font-size:14px;color:var(--gold)}
+
+/* ===== HAND AREA ===== */
+#hand-area{
+  height:82px;min-height:82px;display:flex;align-items:center;justify-content:center;
+  background:var(--bg);border-top:1px solid rgba(61,61,64,0.6);
+  padding:0 10px;gap:2px;z-index:10;flex-wrap:nowrap;overflow-x:auto;
+}
+
+.hand-tile{
+  width:42px;height:58px;
+  background-color:var(--tile-base);
+  border-radius:3px;display:flex;align-items:center;justify-content:center;
+  font-size:17px;font-weight:700;color:var(--tile-text);
+  cursor:pointer;flex-shrink:0;position:relative;
+  background-image:
+    linear-gradient(to bottom, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.08) 20%, transparent 50%, rgba(0,0,0,0.03) 80%, rgba(0,0,0,0.12) 100%);
+  box-shadow:
+    1px 2px 5px rgba(0,0,0,0.5),
+    0 1px 0 rgba(255,255,255,0.4),
+    inset 0 -2px 4px rgba(0,0,0,0.06),
+    inset 0 2px 4px rgba(255,255,255,0.15);
+  transition:transform 0.15s ease-out, box-shadow 0.15s ease-out;
+  border-top:1px solid rgba(255,255,255,0.35);
+  border-left:1px solid rgba(255,255,255,0.1);
+  border-right:1px solid rgba(0,0,0,0.08);
+  border-bottom:1px solid rgba(0,0,0,0.15);
+}
+.hand-tile::after{
+  content:'';position:absolute;top:2px;left:3px;right:3px;height:30%;
+  background:linear-gradient(to bottom, rgba(255,255,255,0.12), transparent);
+  border-radius:2px 2px 50% 50%;pointer-events:none;
+}
+.hand-tile:hover{
+  transform:translateY(-8px);
+  box-shadow:
+    2px 4px 10px rgba(0,0,0,0.6),
+    0 0 12px rgba(184,150,90,0.2),
+    inset 0 -2px 4px rgba(0,0,0,0.06),
+    inset 0 2px 4px rgba(255,255,255,0.15);
+}
+.hand-tile.selected{
+  transform:translateY(-14px);
+  box-shadow:
+    2px 6px 16px rgba(0,0,0,0.5),
+    0 0 20px rgba(184,150,90,0.5),
+    0 0 40px rgba(184,150,90,0.15),
+    inset 0 -2px 4px rgba(0,0,0,0.06),
+    inset 0 2px 4px rgba(255,255,255,0.15);
+}
+.hand-tile.tsumo-tile{
+  margin-left:10px;
+  box-shadow:
+    1px 2px 5px rgba(0,0,0,0.5),
+    0 1px 0 rgba(255,255,255,0.4),
+    0 0 10px rgba(91,138,143,0.3),
+    inset 0 -2px 4px rgba(0,0,0,0.06),
+    inset 0 2px 4px rgba(255,255,255,0.15);
+}
+.hand-tile.riichi-dim{opacity:0.4;pointer-events:none;filter:grayscale(0.3)}
+.hand-tile.dragging{opacity:0.4;transform:scale(0.9)}
+
+.hand-tile.red-dora{
+  background-color:#F5EDE0;
+  box-shadow:
+    1px 2px 5px rgba(0,0,0,0.5),
+    0 1px 0 rgba(255,255,255,0.4),
+    0 0 8px rgba(139,26,26,0.2),
+    inset 0 -2px 4px rgba(139,26,26,0.05),
+    inset 0 2px 4px rgba(255,255,255,0.15);
+}
+.hand-tile.red-dora.selected{
+  box-shadow:
+    2px 6px 16px rgba(0,0,0,0.5),
+    0 0 20px rgba(139,26,26,0.4),
+    0 0 40px rgba(139,26,26,0.15),
+    inset 0 -2px 4px rgba(139,26,26,0.05),
+    inset 0 2px 4px rgba(255,255,255,0.15);
+}
+
+.hand-meld{display:flex;gap:1px;margin-right:8px;flex-shrink:0}
+.hand-meld .meld-tile{
+  width:32px;height:44px;background-color:var(--tile-base);border-radius:2px;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;
+  color:var(--tile-text);
+  box-shadow:1px 1px 4px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.2);
+  background-image:linear-gradient(to bottom,rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.05) 50%,rgba(0,0,0,0.05) 100%);
+}
+.hand-meld .meld-tile.sideways{width:44px;height:32px;font-size:11px}
+.hand-meld .meld-tile.kan-back{
+  background-color:var(--tile-back);color:transparent;
+  background-image:none;
+}
+
+/* Drag ghost */
+#drag-ghost{
+  position:fixed;z-index:200;pointer-events:none;opacity:0.85;
+  transition:none;
+}
+
+/* ===== BUTTON AREA ===== */
+#btn-area{
+  height:52px;min-height:52px;display:flex;align-items:center;justify-content:flex-end;
+  padding:0 16px;gap:10px;background:var(--bg);z-index:10;
+}
+.action-btn{
+  border:none;border-radius:6px;font-family:'Noto Sans JP',sans-serif;font-weight:600;
+  cursor:pointer;height:42px;font-size:15px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.4);
+  transition:transform 0.15s,box-shadow 0.15s,opacity 0.15s;
+  letter-spacing:1px;
+  animation:btnSlideUp 0.25s ease-out;
+}
+@keyframes btnSlideUp{0%{opacity:0;transform:translateY(16px)}100%{opacity:1;transform:translateY(0)}}
+.action-btn:hover{transform:translateY(-2px);box-shadow:0 5px 16px rgba(0,0,0,0.5)}
+.action-btn:active{transform:translateY(0)}
+
+.btn-chi,.btn-pon,.btn-kan{
+  background:linear-gradient(135deg,rgba(91,138,143,0.95),rgba(71,118,123,0.95));
+  color:var(--highlight);border:1px solid rgba(91,138,143,0.6);
+  padding:0 22px;
+}
+.btn-riichi{
+  background:linear-gradient(135deg,#9B2020,var(--red),#6B1515);
+  color:var(--white);border:none;padding:0 28px;font-size:16px;
+  box-shadow:0 3px 12px rgba(139,26,26,0.5);
+  animation:btnSlideUp 0.25s ease-out,riichiPulse 1.5s ease-in-out infinite;
+}
+@keyframes riichiPulse{0%,100%{box-shadow:0 3px 12px rgba(139,26,26,0.4)}50%{box-shadow:0 3px 20px rgba(139,26,26,0.7),0 0 30px rgba(139,26,26,0.2)}}
+
+.btn-tsumo,.btn-ron{
+  background:linear-gradient(135deg,#D4B06A,var(--gold),#9A7A42);
+  color:var(--bg);border:none;padding:0 28px;height:46px;font-size:18px;
+  letter-spacing:2px;
+  box-shadow:0 3px 16px rgba(184,150,90,0.5);
+  animation:btnSlideUp 0.25s ease-out,winBtnPulse 1s ease-in-out infinite;
+}
+@keyframes winBtnPulse{0%,100%{box-shadow:0 3px 16px rgba(184,150,90,0.4);transform:scale(1)}50%{box-shadow:0 5px 24px rgba(184,150,90,0.7),0 0 40px rgba(184,150,90,0.2);transform:scale(1.03)}}
+
+.btn-pass{
+  background:var(--bg);color:var(--highlight);opacity:0.5;
+  border:1px solid var(--border);padding:0 18px;
+  animation:btnSlideUp 0.25s ease-out;
+}
+.btn-pass:hover{opacity:0.7}
+.btn-skip{background:var(--bg2);color:var(--highlight);border:1px solid var(--border);font-size:13px;padding:0 16px}
+
+/* ===== RIICHI LINE ===== */
+.riichi-line{position:absolute;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);z-index:4;transform:scaleX(0);transition:transform 0.5s ease-out;box-shadow:0 0 8px rgba(139,26,26,0.4)}
+.riichi-line.active{transform:scaleX(1)}
+#riichi-line-self{bottom:82px;left:0;right:0;transform-origin:left}
+#riichi-line-opp{top:42px;left:0;right:0;transform-origin:right}
+#riichi-line-left{top:0;bottom:0;left:84px;width:2px;height:100%;transform:scaleY(0);transform-origin:top;background:linear-gradient(180deg,transparent,var(--red),transparent)}
+#riichi-line-left.active{transform:scaleY(1)}
+#riichi-line-right{top:0;bottom:0;right:84px;width:2px;height:100%;transform:scaleY(0);transform-origin:bottom;background:linear-gradient(180deg,transparent,var(--red),transparent)}
+#riichi-line-right.active{transform:scaleY(1)}
+
+/* ===== TUTORIAL OVERLAY ===== */
+#tutorial-overlay{
+  position:fixed;inset:0;background:rgba(10,10,12,0.92);z-index:150;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);
+}
+#tutorial-overlay .tutorial-card{
+  background:var(--bg2);border:1px solid rgba(184,150,90,0.4);border-radius:8px;
+  padding:32px 40px;max-width:420px;text-align:center;
+  box-shadow:0 16px 48px rgba(0,0,0,0.6);
+}
+#tutorial-overlay .tutorial-step{font-size:11px;color:var(--gold);margin-bottom:12px;letter-spacing:2px}
+#tutorial-overlay h3{font-family:'Noto Serif JP',serif;font-size:22px;margin-bottom:16px;color:var(--white)}
+#tutorial-overlay p{font-size:13px;line-height:1.8;color:var(--highlight);margin-bottom:24px;opacity:0.8}
+#tutorial-overlay .tutorial-btns{display:flex;gap:10px;justify-content:center;align-items:center}
+#tutorial-overlay .tutorial-btns button{
+  padding:10px 28px;border-radius:4px;font-family:'Noto Sans JP',sans-serif;
+  font-size:13px;cursor:pointer;letter-spacing:1px;transition:transform 0.2s;
+}
+#tutorial-overlay .tutorial-btns .tut-next{
+  background:linear-gradient(135deg,#C4A265,#B8965A);color:var(--bg);border:none;font-weight:600;
+}
+#tutorial-overlay .tutorial-btns .tut-skip{
+  background:transparent;color:var(--highlight);border:1px solid var(--border);opacity:0.6;
+}
+#tutorial-overlay .tutorial-dots{display:flex;gap:8px;justify-content:center;margin-bottom:20px}
+#tutorial-overlay .tutorial-dots .dot{
+  width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;
+}
+#tutorial-overlay .tutorial-dots .dot.active{background:var(--gold)}
+#tutorial-overlay .no-show-label{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-top:16px;font-size:11px;color:var(--highlight);opacity:0.5;cursor:pointer;
+}
+#tutorial-overlay .no-show-label input{accent-color:var(--gold)}
+
+/* ===== SETTINGS MODAL ===== */
+#settings-modal{
+  position:fixed;inset:0;background:rgba(10,10,12,0.88);z-index:140;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);
+}
+#settings-modal .settings-card{
+  background:var(--bg2);border:1px solid rgba(184,150,90,0.4);border-radius:8px;
+  padding:28px 36px;min-width:340px;max-width:400px;
+  box-shadow:0 16px 48px rgba(0,0,0,0.6);
+}
+#settings-modal h3{
+  font-family:'Noto Serif JP',serif;font-size:20px;margin-bottom:20px;
+  color:var(--gold);text-align:center;letter-spacing:2px;
+}
+.settings-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid rgba(61,61,64,0.4);
+  font-size:13px;
+}
+.settings-row label{color:var(--highlight);opacity:0.8}
+.settings-row select,.settings-row input[type=range]{
+  accent-color:var(--gold);
+}
+.settings-row select{
+  background:var(--bg);color:var(--white);border:1px solid var(--border);
+  padding:4px 8px;border-radius:4px;font-size:12px;font-family:'Noto Sans JP',sans-serif;
+}
+.settings-close{
+  display:block;margin:20px auto 0;padding:10px 32px;
+  background:linear-gradient(135deg,#C4A265,#B8965A);color:var(--bg);border:none;
+  border-radius:4px;font-family:'Noto Sans JP',sans-serif;font-weight:600;
+  font-size:13px;cursor:pointer;letter-spacing:1px;
+}
+.settings-row .toggle-switch{
+  position:relative;width:44px;height:24px;cursor:pointer;
+}
+.settings-row .toggle-switch input{opacity:0;width:0;height:0}
+.settings-row .toggle-switch .slider{
+  position:absolute;inset:0;background:var(--border);border-radius:12px;
+  transition:background 0.3s;
+}
+.settings-row .toggle-switch .slider::before{
+  content:'';position:absolute;width:18px;height:18px;border-radius:50%;
+  background:var(--white);left:3px;top:3px;transition:transform 0.3s;
+}
+.settings-row .toggle-switch input:checked + .slider{background:var(--gold)}
+.settings-row .toggle-switch input:checked + .slider::before{transform:translateX(20px)}
+
+/* ===== STATS MODAL ===== */
+#stats-modal{
+  position:fixed;inset:0;background:rgba(10,10,12,0.88);z-index:140;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);
+}
+#stats-modal .stats-card{
+  background:var(--bg2);border:1px solid rgba(184,150,90,0.4);border-radius:8px;
+  padding:28px 36px;min-width:320px;
+  box-shadow:0 16px 48px rgba(0,0,0,0.6);text-align:center;
+}
+#stats-modal h3{
+  font-family:'Noto Serif JP',serif;font-size:20px;margin-bottom:20px;
+  color:var(--gold);letter-spacing:2px;
+}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
+.stats-item{text-align:center}
+.stats-item .stats-val{font-family:'Noto Serif JP',serif;font-size:24px;color:var(--gold)}
+.stats-item .stats-label{font-size:10px;color:var(--highlight);opacity:0.5;margin-top:2px}
+.stats-reset{
+  background:transparent;border:1px solid rgba(139,26,26,0.4);color:var(--red);
+  padding:6px 16px;font-size:11px;border-radius:4px;cursor:pointer;
+  font-family:'Noto Sans JP',sans-serif;margin-top:12px;
+}
+.stats-close{
+  display:block;margin:16px auto 0;padding:10px 32px;
+  background:linear-gradient(135deg,#C4A265,#B8965A);color:var(--bg);border:none;
+  border-radius:4px;font-family:'Noto Sans JP',sans-serif;font-weight:600;
+  font-size:13px;cursor:pointer;letter-spacing:1px;
+}
+
+/* ===== TOAST ===== */
+.toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+  background:rgba(46,46,48,0.95);color:var(--white);padding:10px 24px;
+  border-radius:6px;font-size:13px;z-index:200;
+  box-shadow:0 4px 16px rgba(0,0,0,0.4);border:1px solid rgba(184,150,90,0.3);
+  animation:toastIn 0.3s ease-out;pointer-events:none;
+}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ===== FOOTER ===== */
+#game-footer{
+  position:absolute;bottom:0;left:0;right:0;
+  text-align:center;font-size:9px;color:var(--highlight);opacity:0.3;
+  padding:4px;pointer-events:none;z-index:1;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:700px){
+  .hand-tile{width:32px;height:46px;font-size:14px}
+  .hand-tile.tsumo-tile{margin-left:8px}
+  #left-panel,#right-panel{width:62px;min-width:62px;font-size:9px}
+  #discard-self .disc-tile,#discard-opp .disc-tile{width:21px;height:29px;font-size:9px}
+  #center-panel{width:94px;height:94px}
+  #info-bar{font-size:10px;height:34px;min-height:34px}
+  #hand-area{height:66px;min-height:66px}
+  #btn-area{height:46px;min-height:46px}
+  .action-btn{height:38px;font-size:13px}
+  #title-screen h1{font-size:40px;letter-spacing:10px}
+}
+@media(min-width:1100px){
+  .hand-tile{width:50px;height:70px;font-size:21px}
+  .hand-tile.tsumo-tile{margin-left:12px}
+  #left-panel,#right-panel{width:104px}
+  #discard-self .disc-tile,#discard-opp .disc-tile{width:30px;height:40px;font-size:13px}
+  #center-panel{width:136px;height:136px}
+  #hand-area{height:92px;min-height:92px}
+  #info-bar{height:44px;min-height:44px}
+  .side-score{font-size:16px}
+}
+
+/* Landscape warning */
+@media(orientation:portrait){
+  #landscape-warn{display:flex!important}
+  #app{display:none!important}
+}
+#landscape-warn{
+  display:none;position:fixed;inset:0;background:var(--bg);
+  align-items:center;justify-content:center;flex-direction:column;z-index:200;
+  color:var(--white);font-size:15px;gap:16px;letter-spacing:1px;
+}
+#landscape-warn .icon{font-size:48px;opacity:0.4}
+#landscape-warn .hint{font-size:12px;color:var(--highlight);opacity:0.5}
+
+/* ===== REDUCED MOTION ===== */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:0.01ms!important;animation-iteration-count:1!important;
+    transition-duration:0.01ms!important;
+  }
+}
+</style>
+</head>
+<body>
+<div id="landscape-warn">
+  <div class="icon" aria-hidden="true">&#x1F4F1;</div>
+  <div>画面を横向きにしてください</div>
+  <div class="hint">Rotate your device to landscape</div>
+</div>
+<div id="app">
+<!-- Title -->
+<div id="title-screen">
+<h1>雀凛</h1>
+<div class="title-line" aria-hidden="true"></div>
+<div class="sub">- JANRIN -</div>
+<div class="title-stats" id="title-stats"></div>
+<button onclick="startGame()" aria-label="対局を開始する">対局開始</button>
+<div class="title-bottom-btns">
+  <button onclick="showStatsModal()">戦績</button>
+  <button onclick="showSettingsModal()">設定</button>
+</div>
+</div>
+
+<!-- Result -->
+<div id="result-screen" class="hidden" role="dialog" aria-label="対局結果">
+<h2>対局結果</h2>
+<div class="result-line" aria-hidden="true"></div>
+<div class="scores" id="result-scores"></div>
+<div class="result-share-area">
+  <button onclick="copyResultToClipboard()">結果をコピー</button>
+  <button onclick="shareToX()">Xでシェア</button>
+</div>
+<button class="result-main-btn" onclick="restartGame()" aria-label="もう一度対局する">もう一度</button>
+</div>
+
+<!-- Agari Overlay -->
+<div id="agari-overlay" class="hidden" role="dialog" aria-label="和了結果">
+<canvas id="agari-particles"></canvas>
+<div class="agari-type" id="agari-type"></div>
+<div class="agari-hand" id="agari-hand"></div>
+<div class="yaku-list" id="yaku-list" role="list" aria-label="役一覧"></div>
+<button class="agari-btn" id="agari-btn" onclick="nextAfterAgari()" aria-label="次の局へ進む">次へ</button>
+</div>
+
+<!-- Game -->
+<div id="game" class="hidden">
+<div id="info-bar" role="status" aria-label="対局情報">
+  <span class="remain-label" aria-hidden="true">残</span><span class="remain" id="remain-count" aria-label="残り牌数">70</span>
+  <span class="round-info" id="round-info" aria-label="現在の局">東1局</span>
+  <span class="honba" id="honba-info">0本場</span>
+  <span id="shanten-display"></span>
+  <span id="machi-display"></span>
+  <div class="dora-area" aria-label="ドラ表示">
+    <span class="dora-label">ドラ</span>
+    <div id="dora-tiles" style="display:flex;gap:3px"></div>
+  </div>
+  <span class="sound-toggle" id="sound-toggle" onclick="toggleSound()" title="サウンドON/OFF">&#x1F50A;</span>
+  <span class="settings-toggle" id="settings-gear" onclick="showSettingsModal()" title="設定">&#x2699;</span>
+</div>
+<div id="timer-bar" aria-hidden="true"><div id="timer-progress"></div></div>
+<div id="main-area">
+  <div id="left-panel" aria-label="左家情報">
+    <div class="side-name" id="left-name">AI-B</div>
+    <div class="side-wind" id="left-wind">西</div>
+    <div class="side-score" id="left-score">25000</div>
+    <div class="side-riichi-mark hidden" id="left-riichi">立直</div>
+    <div class="side-tiles" id="left-tiles"></div>
+  </div>
+  <div id="table-area">
+    <div id="opp-top" aria-label="対面情報">
+      <div class="opp-info"><span class="opp-name" id="opp-name">AI-A</span><span class="side-wind" id="opp-wind">北</span><span class="opp-score" id="opp-score">25000</span><span class="side-riichi-mark hidden" id="opp-riichi">立直</span></div>
+      <div class="opp-tiles" id="opp-tiles"></div>
+    </div>
+    <div id="center-panel" aria-label="局情報"></div>
+    <div class="discard-area" id="discard-self" aria-label="自分の捨て牌"></div>
+    <div class="discard-area" id="discard-opp" aria-label="対面の捨て牌"></div>
+    <div class="discard-area" id="discard-left" aria-label="左家の捨て牌"></div>
+    <div class="discard-area" id="discard-right" aria-label="右家の捨て牌"></div>
+    <div class="riichi-line" id="riichi-line-self" aria-hidden="true"></div>
+    <div class="riichi-line" id="riichi-line-opp" aria-hidden="true"></div>
+    <div class="riichi-line" id="riichi-line-left" aria-hidden="true"></div>
+    <div class="riichi-line" id="riichi-line-right" aria-hidden="true"></div>
+  </div>
+  <div id="right-panel" aria-label="右家情報">
+    <div class="side-name" id="right-name">AI-C</div>
+    <div class="side-wind" id="right-wind">東</div>
+    <div class="side-score" id="right-score">25000</div>
+    <div class="side-riichi-mark hidden" id="right-riichi">立直</div>
+    <div class="side-tiles" id="right-tiles"></div>
+  </div>
+</div>
+<div id="hand-area" role="group" aria-label="手牌"></div>
+<div id="btn-area" role="group" aria-label="アクションボタン"></div>
+<div id="game-footer">&copy; 2026 Cross Field Inc. | 雀凛 -JANRIN- Demo | 正式版は2027年リリース予定 | <span style="pointer-events:auto;cursor:pointer;text-decoration:underline" onclick="showToast('事前登録は準備中です')">事前登録</span></div>
+</div>
+</div>
+
+<!-- Drag ghost element -->
+<div id="drag-ghost" class="hidden"></div>
+
+<script>
+"use strict";
+
+// ===== SETTINGS & STATE =====
+const SETTINGS_KEY = 'janrin_settings';
+const STATS_KEY = 'janrin_stats';
+const TUTORIAL_KEY = 'janrin_tutorial_done';
+
+let Settings = loadSettings();
+function loadSettings() {
+  try {
+    let s = JSON.parse(localStorage.getItem(SETTINGS_KEY));
+    if (s) return s;
+  } catch(e) {}
+  return {soundEnabled:true, effectsEnabled:true, shantenEnabled:true, aiSpeed:'normal', volume:0.5};
+}
+function saveSettings() { localStorage.setItem(SETTINGS_KEY, JSON.stringify(Settings)); }
+
+function loadStats() {
+  try {
+    let s = JSON.parse(localStorage.getItem(STATS_KEY));
+    if (s && Array.isArray(s.results)) return s;
+  } catch(e) {}
+  return {results:[]};
+}
+function saveStats(stats) { localStorage.setItem(STATS_KEY, JSON.stringify(stats)); }
+
+function getAiDelay() {
+  if (Settings.aiSpeed === 'fast') return 150;
+  if (Settings.aiSpeed === 'slow') return 800;
+  return 400;
+}
+
+// ===== SOUND ENGINE (Web Audio API, OscillatorNode only) =====
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playTsumoSound() {
+  if (!Settings.soundEnabled) return;
+  const ctx = getAudioCtx();
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(Settings.volume * 0.15, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+  g.connect(ctx.destination);
+  const o = ctx.createOscillator();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(800, ctx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.03);
+  o.connect(g);
+  o.start(ctx.currentTime);
+  o.stop(ctx.currentTime + 0.08);
+}
+
+function playDahaiSound() {
+  if (!Settings.soundEnabled) return;
+  const ctx = getAudioCtx();
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(Settings.volume * 0.25, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+  g.connect(ctx.destination);
+  // White noise burst for tile-on-table sound
+  const bufferSize = ctx.sampleRate * 0.15;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.02));
+  }
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  // Bandpass to make it sound like a tile click
+  const bp = ctx.createBiquadFilter();
+  bp.type = 'bandpass';
+  bp.frequency.value = 2000;
+  bp.Q.value = 2;
+  noise.connect(bp);
+  bp.connect(g);
+  noise.start(ctx.currentTime);
+  noise.stop(ctx.currentTime + 0.15);
+}
+
+function playAgariSound() {
+  if (!Settings.soundEnabled) return;
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  // Chime: three ascending tones
+  const notes = [523, 659, 784]; // C5 E5 G5
+  notes.forEach((freq, i) => {
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, now + i * 0.15);
+    g.gain.linearRampToValueAtTime(Settings.volume * 0.2, now + i * 0.15 + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.5);
+    g.connect(ctx.destination);
+    const o = ctx.createOscillator();
+    o.type = 'sine';
+    o.frequency.value = freq;
+    o.connect(g);
+    o.start(now + i * 0.15);
+    o.stop(now + i * 0.15 + 0.5);
+  });
+}
+
+function playRiichiSound() {
+  if (!Settings.soundEnabled) return;
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  // Sharp rising tone
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(Settings.volume * 0.2, now);
+  g.gain.linearRampToValueAtTime(Settings.volume * 0.3, now + 0.1);
+  g.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+  g.connect(ctx.destination);
+  const o = ctx.createOscillator();
+  o.type = 'sawtooth';
+  o.frequency.setValueAtTime(440, now);
+  o.frequency.exponentialRampToValueAtTime(880, now + 0.15);
+  o.connect(g);
+  o.start(now);
+  o.stop(now + 0.4);
+}
+
+function toggleSound() {
+  Settings.soundEnabled = !Settings.soundEnabled;
+  saveSettings();
+  updateSoundIcon();
+}
+
+function updateSoundIcon() {
+  const el = document.getElementById('sound-toggle');
+  if (el) el.innerHTML = Settings.soundEnabled ? '&#x1F50A;' : '&#x1F507;';
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  let existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+  let t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2000);
+}
+
+// ===== TUTORIAL =====
+function showTutorial() {
+  if (localStorage.getItem(TUTORIAL_KEY) === '1') return;
+  const steps = [
+    {title:'牌の選択と打牌', desc:'牌を1回タップで選択。\nもう1回タップで打牌（捨てる）します。\nドラッグ&ドロップでも打牌できます。'},
+    {title:'鳴き・立直', desc:'相手の捨て牌に対して\nチー・ポン・カンのボタンが表示されます。\nテンパイ時は「立直」ボタンが光ります。'},
+    {title:'ロン・ツモで和了', desc:'和了できるとき「ロン」「ツモ」ボタンが\n出現します。タップして和了しましょう。\n東風戦（4局）で対局します。'},
+  ];
+  let step = 0;
+  const overlay = document.createElement('div');
+  overlay.id = 'tutorial-overlay';
+
+  function renderStep() {
+    overlay.innerHTML = `
+      <div class="tutorial-card">
+        <div class="tutorial-step">STEP ${step+1} / ${steps.length}</div>
+        <div class="tutorial-dots">${steps.map((_,i) => `<div class="dot${i===step?' active':''}"></div>`).join('')}</div>
+        <h3>${steps[step].title}</h3>
+        <p>${steps[step].desc.replace(/\n/g,'<br>')}</p>
+        <div class="tutorial-btns">
+          <button class="tut-skip" onclick="closeTutorial()">スキップ</button>
+          <button class="tut-next" id="tut-next-btn">${step === steps.length-1 ? 'はじめる' : '次へ'}</button>
+        </div>
+        <label class="no-show-label"><input type="checkbox" id="tut-noshow">もう表示しない</label>
+      </div>
+    `;
+    document.getElementById('tut-next-btn').onclick = () => {
+      if (step < steps.length - 1) { step++; renderStep(); }
+      else closeTutorial();
+    };
+  }
+
+  window.closeTutorial = function() {
+    const cb = document.getElementById('tut-noshow');
+    if (cb && cb.checked) localStorage.setItem(TUTORIAL_KEY, '1');
+    overlay.remove();
+  };
+
+  renderStep();
+  document.body.appendChild(overlay);
+}
+
+// ===== SETTINGS MODAL =====
+function showSettingsModal() {
+  if (document.getElementById('settings-modal')) return;
+  const m = document.createElement('div');
+  m.id = 'settings-modal';
+  m.innerHTML = `
+    <div class="settings-card">
+      <h3>設定</h3>
+      <div class="settings-row"><label>AI打牌速度</label>
+        <select id="set-speed">
+          <option value="fast"${Settings.aiSpeed==='fast'?' selected':''}>速い</option>
+          <option value="normal"${Settings.aiSpeed==='normal'?' selected':''}>普通</option>
+          <option value="slow"${Settings.aiSpeed==='slow'?' selected':''}>遅い</option>
+        </select>
+      </div>
+      <div class="settings-row"><label>演出</label>
+        <label class="toggle-switch"><input type="checkbox" id="set-effects"${Settings.effectsEnabled?' checked':''}><span class="slider"></span></label>
+      </div>
+      <div class="settings-row"><label>サウンド</label>
+        <label class="toggle-switch"><input type="checkbox" id="set-sound"${Settings.soundEnabled?' checked':''}><span class="slider"></span></label>
+      </div>
+      <div class="settings-row"><label>音量</label>
+        <input type="range" id="set-volume" min="0" max="1" step="0.1" value="${Settings.volume}" style="width:100px">
+      </div>
+      <div class="settings-row"><label>向聴数表示</label>
+        <label class="toggle-switch"><input type="checkbox" id="set-shanten"${Settings.shantenEnabled?' checked':''}><span class="slider"></span></label>
+      </div>
+      <button class="settings-close" onclick="closeSettingsModal()">閉じる</button>
+    </div>
+  `;
+  document.body.appendChild(m);
+  m.addEventListener('click', (e) => { if (e.target === m) closeSettingsModal(); });
+}
+function closeSettingsModal() {
+  const m = document.getElementById('settings-modal');
+  if (!m) return;
+  Settings.aiSpeed = document.getElementById('set-speed').value;
+  Settings.effectsEnabled = document.getElementById('set-effects').checked;
+  Settings.soundEnabled = document.getElementById('set-sound').checked;
+  Settings.volume = parseFloat(document.getElementById('set-volume').value);
+  Settings.shantenEnabled = document.getElementById('set-shanten').checked;
+  saveSettings();
+  updateSoundIcon();
+  m.remove();
+}
+
+// ===== STATS MODAL =====
+function showStatsModal() {
+  if (document.getElementById('stats-modal')) return;
+  const stats = loadStats();
+  const total = stats.results.length;
+  let first = 0, avgRank = 0;
+  if (total > 0) {
+    first = stats.results.filter(r => r.rank === 1).length;
+    avgRank = stats.results.reduce((s, r) => s + r.rank, 0) / total;
+  }
+  const m = document.createElement('div');
+  m.id = 'stats-modal';
+  m.innerHTML = `
+    <div class="stats-card">
+      <h3>戦績</h3>
+      <div class="stats-grid">
+        <div class="stats-item"><div class="stats-val">${total}</div><div class="stats-label">対局数</div></div>
+        <div class="stats-item"><div class="stats-val">${total > 0 ? (first/total*100).toFixed(1)+'%' : '-'}</div><div class="stats-label">1位率</div></div>
+        <div class="stats-item"><div class="stats-val">${total > 0 ? avgRank.toFixed(2) : '-'}</div><div class="stats-label">平均順位</div></div>
+      </div>
+      <button class="stats-reset" onclick="resetStats()">戦績リセット</button>
+      <button class="stats-close" onclick="document.getElementById('stats-modal').remove()">閉じる</button>
+    </div>
+  `;
+  document.body.appendChild(m);
+  m.addEventListener('click', (e) => { if (e.target === m) m.remove(); });
+}
+function resetStats() {
+  if (confirm('戦績をリセットしますか?')) {
+    saveStats({results:[]});
+    document.getElementById('stats-modal').remove();
+    updateTitleStats();
+    showToast('戦績をリセットしました');
+  }
+}
+
+function updateTitleStats() {
+  const el = document.getElementById('title-stats');
+  if (!el) return;
+  const stats = loadStats();
+  const total = stats.results.length;
+  if (total === 0) { el.textContent = ''; return; }
+  let first = stats.results.filter(r => r.rank === 1).length;
+  let avgRank = stats.results.reduce((s, r) => s + r.rank, 0) / total;
+  el.textContent = `対局${total}回 | 1位率${(first/total*100).toFixed(1)}% | 平均順位${avgRank.toFixed(2)}`;
+}
+
+function recordResult(rank, score) {
+  const stats = loadStats();
+  stats.results.push({rank, score, date: new Date().toISOString()});
+  if (stats.results.length > 50) stats.results = stats.results.slice(-50);
+  saveStats(stats);
+}
+
+// ===== SHARE =====
+let lastResultData = null;
+
+function copyResultToClipboard() {
+  if (!lastResultData) return;
+  const text = `雀凛で${lastResultData.rank}位! ${lastResultData.score.toLocaleString()}点 #雀凛 #JANRIN`;
+  navigator.clipboard.writeText(text).then(() => showToast('コピーしました')).catch(() => showToast('コピーに失敗しました'));
+}
+
+function shareToX() {
+  if (!lastResultData) return;
+  const text = `雀凛で${lastResultData.rank}位! ${lastResultData.score.toLocaleString()}点 #雀凛 #JANRIN`;
+  const url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+  window.open(url, '_blank', 'noopener');
+}
+
+// ===== TILE DEFINITIONS =====
+const SUIT_NAMES = ['萬','筒','索','風','三元'];
+const WIND_NAMES = ['','東','南','西','北'];
+const DRAGON_NAMES = ['','白','發','中'];
+
+function tileLabel(t) {
+  if (!t) return '?';
+  if (t.suit <= 2) {
+    const nums = ['','一','二','三','四','五','六','七','八','九'];
+    const suits = ['萬','筒','索'];
+    let n = t.red ? '赤' + nums[5] : nums[t.num];
+    return n + suits[t.suit];
+  }
+  if (t.suit === 3) return WIND_NAMES[t.num];
+  if (t.suit === 4) return DRAGON_NAMES[t.num];
+  return '?';
+}
+
+function tileShort(t) {
+  if (!t) return '?';
+  if (t.suit <= 2) {
+    const s = ['m','p','s'][t.suit];
+    return (t.red ? '0' : t.num) + s;
+  }
+  if (t.suit === 3) return WIND_NAMES[t.num];
+  if (t.suit === 4) return DRAGON_NAMES[t.num];
+  return '?';
+}
+
+function tileDisplay(t) {
+  if (!t) return '?';
+  if (t.suit === 0) {
+    const ch = ['','一','二','三','四','五','六','七','八','九'];
+    return (t.red ? '五' : ch[t.num]);
+  }
+  if (t.suit === 1) {
+    const ch = ['','①','②','③','④','⑤','⑥','⑦','⑧','⑨'];
+    return (t.red ? '⑤' : ch[t.num]);
+  }
+  if (t.suit === 2) {
+    const ch = ['','1','2','3','4','5','6','7','8','9'];
+    return (t.red ? '5' : ch[t.num]);
+  }
+  if (t.suit === 3) return WIND_NAMES[t.num];
+  if (t.suit === 4) return DRAGON_NAMES[t.num];
+  return '?';
+}
+
+function tileColor(t) {
+  if (!t) return '#1C1010';
+  if (t.red) return '#A02020';
+  if (t.suit === 0) return '#1C1010';
+  if (t.suit === 1) return '#1A3A6E';
+  if (t.suit === 2) return '#1A5A2A';
+  if (t.suit === 3) return '#1C1010';
+  if (t.suit === 4) {
+    if (t.num === 2) return '#1A5A2A';
+    if (t.num === 3) return '#8B1A1A';
+    return '#1C1010';
+  }
+  return '#1C1010';
+}
+
+function tileSortKey(t) {
+  return t.suit * 100 + (t.red ? t.num - 0.5 : t.num);
+}
+
+function tilesEqual(a, b) {
+  return a.suit === b.suit && a.num === b.num;
+}
+
+function tileKey(t) {
+  return t.suit * 10 + t.num;
+}
+
+function createAllTiles() {
+  let tiles = [];
+  let id = 0;
+  for (let suit = 0; suit <= 2; suit++) {
+    for (let num = 1; num <= 9; num++) {
+      for (let copy = 0; copy < 4; copy++) {
+        let red = false;
+        if (num === 5 && copy === 0) red = true;
+        tiles.push({ suit, num, red, id: id++ });
+      }
+    }
+  }
+  for (let num = 1; num <= 4; num++) {
+    for (let copy = 0; copy < 4; copy++) {
+      tiles.push({ suit: 3, num, red: false, id: id++ });
+    }
+  }
+  for (let num = 1; num <= 3; num++) {
+    for (let copy = 0; copy < 4; copy++) {
+      tiles.push({ suit: 4, num, red: false, id: id++ });
+    }
+  }
+  return tiles;
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function sortHand(hand) {
+  return hand.slice().sort((a, b) => tileSortKey(a) - tileSortKey(b));
+}
+
+// ===== HAND ANALYSIS =====
+function handToCount(tiles) {
+  let c = Array.from({length:5}, () => new Array(10).fill(0));
+  for (const t of tiles) c[t.suit][t.num]++;
+  return c;
+}
+
+function calcShanten(tiles, melds) {
+  if (typeof melds === 'undefined') melds = 0;
+  const c = handToCount(tiles);
+  const s1 = shantenNormal(c, melds);
+  const s2 = tiles.length >= 13 ? shantenChiitoi(c) : 99;
+  const s3 = tiles.length >= 13 ? shantenKokushi(c) : 99;
+  return Math.min(s1, s2, s3);
+}
+
+function shantenNormal(c, melds) {
+  let best = 8 - melds * 2;
+  function rec(s, n, mentsu, jantai, partial) {
+    if (s > 4 || (s === 4 && n > 9)) {
+      let sh = 8 - melds * 2 - mentsu * 2 - jantai - partial;
+      if (sh < best) best = sh;
+      return;
+    }
+    let ns = s, nn = n + 1;
+    if (nn > 9) { ns = s + 1; nn = (ns >= 3) ? 1 : 1; }
+    if (s >= 5) return;
+    if (n > 9) { rec(s + 1, 1, mentsu, jantai, partial); return; }
+    if (c[s][n] >= 2 && jantai === 0) {
+      c[s][n] -= 2;
+      rec(s, n, mentsu, 1, partial);
+      c[s][n] += 2;
+    }
+    if (c[s][n] >= 3) {
+      c[s][n] -= 3;
+      rec(s, n, mentsu + 1, jantai, partial);
+      c[s][n] += 3;
+    }
+    if (s <= 2 && n <= 7 && c[s][n] >= 1 && c[s][n+1] >= 1 && c[s][n+2] >= 1) {
+      c[s][n]--; c[s][n+1]--; c[s][n+2]--;
+      rec(s, n, mentsu + 1, jantai, partial);
+      c[s][n]++; c[s][n+1]++; c[s][n+2]++;
+    }
+    if (c[s][n] >= 2) {
+      c[s][n] -= 2;
+      rec(s, n, mentsu, jantai, partial + 1);
+      c[s][n] += 2;
+    }
+    if (s <= 2 && n <= 8 && c[s][n] >= 1 && c[s][n+1] >= 1) {
+      c[s][n]--; c[s][n+1]--;
+      rec(s, n, mentsu, jantai, partial + 1);
+      c[s][n]++; c[s][n+1]++;
+    }
+    if (s <= 2 && n <= 7 && c[s][n] >= 1 && c[s][n+2] >= 1) {
+      c[s][n]--; c[s][n+2]--;
+      rec(s, n, mentsu, jantai, partial + 1);
+      c[s][n]++; c[s][n+2]++;
+    }
+    rec(s, nn > 9 ? 1 : nn, mentsu, jantai, partial);
+    if (nn > 9) return;
+  }
+  rec(0, 1, 0, 0, 0);
+  return best;
+}
+
+function shantenChiitoi(c) {
+  let pairs = 0, kinds = 0;
+  for (let s = 0; s < 5; s++)
+    for (let n = 1; n <= 9; n++) {
+      if (s >= 3 && n > (s === 3 ? 4 : 3)) continue;
+      if (c[s][n] >= 2) pairs++;
+      if (c[s][n] >= 1) kinds++;
+    }
+  return 6 - pairs + Math.max(0, 7 - kinds);
+}
+
+function shantenKokushi(c) {
+  const terminals = [[0,1],[0,9],[1,1],[1,9],[2,1],[2,9],[3,1],[3,2],[3,3],[3,4],[4,1],[4,2],[4,3]];
+  let kinds = 0, hasPair = false;
+  for (const [s,n] of terminals) {
+    if (c[s][n] >= 1) kinds++;
+    if (c[s][n] >= 2) hasPair = true;
+  }
+  return 13 - kinds - (hasPair ? 1 : 0);
+}
+
+function isComplete(tiles, melds) {
+  const c = handToCount(tiles);
+  if (isCompleteNormal(c, melds)) return true;
+  if (melds === 0 && isCompleteChiitoi(c)) return true;
+  if (melds === 0 && isCompleteKokushi(c)) return true;
+  return false;
+}
+
+function isCompleteNormal(c, melds) {
+  for (let s = 0; s < 5; s++)
+    for (let n = 1; n <= 9; n++) {
+      if (s >= 3 && n > (s === 3 ? 4 : 3)) continue;
+      if (c[s][n] >= 2) {
+        c[s][n] -= 2;
+        if (removeMentsu(c, 4 - melds)) { c[s][n] += 2; return true; }
+        c[s][n] += 2;
+      }
+    }
+  return false;
+}
+
+function removeMentsu(c, need) {
+  if (need === 0) {
+    for (let s = 0; s < 5; s++)
+      for (let n = 1; n <= 9; n++) if (c[s][n] !== 0) return false;
+    return true;
+  }
+  for (let s = 0; s < 5; s++)
+    for (let n = 1; n <= 9; n++) {
+      if (s >= 3 && n > (s === 3 ? 4 : 3)) continue;
+      if (c[s][n] >= 3) {
+        c[s][n] -= 3;
+        if (removeMentsu(c, need - 1)) { c[s][n] += 3; return true; }
+        c[s][n] += 3;
+      }
+      if (s <= 2 && n <= 7 && c[s][n] >= 1 && c[s][n+1] >= 1 && c[s][n+2] >= 1) {
+        c[s][n]--; c[s][n+1]--; c[s][n+2]--;
+        if (removeMentsu(c, need - 1)) { c[s][n]++; c[s][n+1]++; c[s][n+2]++; return true; }
+        c[s][n]++; c[s][n+1]++; c[s][n+2]++;
+      }
+    }
+  return false;
+}
+
+function isCompleteChiitoi(c) {
+  let pairs = 0;
+  for (let s = 0; s < 5; s++)
+    for (let n = 1; n <= 9; n++) {
+      if (s >= 3 && n > (s === 3 ? 4 : 3)) continue;
+      if (c[s][n] === 2) pairs++;
+      else if (c[s][n] !== 0) return false;
+    }
+  return pairs === 7;
+}
+
+function isCompleteKokushi(c) {
+  const terminals = [[0,1],[0,9],[1,1],[1,9],[2,1],[2,9],[3,1],[3,2],[3,3],[3,4],[4,1],[4,2],[4,3]];
+  let total = 0, hasPair = false;
+  for (const [s,n] of terminals) {
+    if (c[s][n] === 0) return false;
+    if (c[s][n] === 2) { if (hasPair) return false; hasPair = true; }
+    total += c[s][n];
+  }
+  return total === 14 && hasPair;
+}
+
+function getWaitingTiles(hand, meldCount) {
+  let waits = [];
+  for (let s = 0; s < 5; s++) {
+    let maxN = s <= 2 ? 9 : (s === 3 ? 4 : 3);
+    for (let n = 1; n <= maxN; n++) {
+      let t = {suit:s, num:n, red:false, id:-1};
+      if (isComplete([...hand, t], meldCount)) {
+        waits.push(t);
+      }
+    }
+  }
+  return waits;
+}
+
+// ===== YAKU EVALUATION =====
+function evaluateYaku(tiles, melds, winTile, isTsumo, isRiichi, isIppatsu, seatWind, roundWind, isDoubleRiichi, doraList, uradoraList, isLastTile, isRinshan) {
+  let yakuList = [];
+  let han = 0;
+  const c = handToCount(tiles);
+  const isMenzen = melds.length === 0;
+  const allTiles = tiles.slice();
+
+  let decomp = decomposeHand(c, melds.length);
+  let isChiitoi = isMenzen && isCompleteChiitoi(handToCount(tiles));
+  let isKokushi = isMenzen && isCompleteKokushi(handToCount(tiles));
+
+  if (isKokushi) {
+    yakuList.push({name:'国士無双', han:13, isYakuman:true});
+    return {yakuList, han:13, isYakuman:true};
+  }
+
+  if (isMenzen && decomp && decomp.mentsu.filter(m => m.type === 'koutsu').length === 4) {
+    yakuList.push({name:'四暗刻', han:13, isYakuman:true});
+    return {yakuList, han:13, isYakuman:true};
+  }
+
+  if (decomp) {
+    let dragonKoutsu = 0;
+    const allMentsu = [...decomp.mentsu, ...melds.map(m => ({type: m.type === 'pon' ? 'koutsu' : m.type, tiles: m.tiles}))];
+    for (const m of allMentsu) {
+      if ((m.type === 'koutsu' || m.type === 'kan') && m.tiles[0].suit === 4) dragonKoutsu++;
+    }
+    if (dragonKoutsu === 3) {
+      yakuList.push({name:'大三元', han:13, isYakuman:true});
+      return {yakuList, han:13, isYakuman:true};
+    }
+  }
+
+  if (allTiles.every(t => t.suit >= 3)) {
+    let meldOk = melds.every(m => m.tiles.every(t => t.suit >= 3));
+    if (meldOk) {
+      yakuList.push({name:'字一色', han:13, isYakuman:true});
+      return {yakuList, han:13, isYakuman:true};
+    }
+  }
+
+  if (!decomp && !isChiitoi) return {yakuList:[], han:0, isYakuman:false};
+
+  if (isRiichi) {
+    if (isDoubleRiichi) {
+      yakuList.push({name:'ダブル立直', han:2}); han += 2;
+    } else {
+      yakuList.push({name:'立直', han:1}); han += 1;
+    }
+  }
+
+  if (isIppatsu) { yakuList.push({name:'一発', han:1}); han += 1; }
+  if (isMenzen && isTsumo && !isChiitoi) { yakuList.push({name:'門前清自摸和', han:1}); han += 1; }
+  if (isChiitoi) { yakuList.push({name:'七対子', han:2}); han += 2; }
+
+  if (decomp && !isChiitoi) {
+    const allMentsu = [...decomp.mentsu, ...melds.map(m => ({type: m.type === 'pon' ? 'koutsu' : m.type, tiles: m.tiles}))];
+
+    if (isMenzen) {
+      let allShuntsu = allMentsu.every(m => m.type === 'shuntsu');
+      let jantaiOk = true;
+      if (decomp.jantai) {
+        const jt = decomp.jantai;
+        if (jt.suit === 4) jantaiOk = false;
+        if (jt.suit === 3 && jt.num === seatWind) jantaiOk = false;
+        if (jt.suit === 3 && jt.num === roundWind) jantaiOk = false;
+      }
+      if (allShuntsu && jantaiOk && allMentsu.length === 4) {
+        yakuList.push({name:'平和', han:1}); han += 1;
+      }
+    }
+
+    let allSimple = allTiles.every(t => t.suit <= 2 && t.num >= 2 && t.num <= 8);
+    let meldsSimple = melds.every(m => m.tiles.every(t => t.suit <= 2 && t.num >= 2 && t.num <= 8));
+    if (allSimple && meldsSimple) { yakuList.push({name:'断么九', han:1}); han += 1; }
+
+    for (const m of allMentsu) {
+      if (m.type === 'koutsu' || m.type === 'kan') {
+        const t0 = m.tiles[0];
+        if (t0.suit === 4) { yakuList.push({name:'役牌(' + DRAGON_NAMES[t0.num] + ')', han:1}); han += 1; }
+        if (t0.suit === 3 && t0.num === seatWind) { yakuList.push({name:'役牌(自風' + WIND_NAMES[t0.num] + ')', han:1}); han += 1; }
+        if (t0.suit === 3 && t0.num === roundWind && !(t0.num === seatWind && yakuList.some(y => y.name.includes('自風')))) {
+          yakuList.push({name:'役牌(場風' + WIND_NAMES[t0.num] + ')', han:1}); han += 1;
+        }
+      }
+    }
+
+    if (isMenzen) {
+      let shuntsuKeys = allMentsu.filter(m => m.type === 'shuntsu').map(m => m.tiles[0].suit * 10 + m.tiles[0].num);
+      let pairs = 0;
+      let used = new Array(shuntsuKeys.length).fill(false);
+      for (let i = 0; i < shuntsuKeys.length; i++) {
+        if (used[i]) continue;
+        for (let j = i + 1; j < shuntsuKeys.length; j++) {
+          if (used[j]) continue;
+          if (shuntsuKeys[i] === shuntsuKeys[j]) { used[i] = used[j] = true; pairs++; break; }
+        }
+      }
+      if (pairs === 2) { yakuList.push({name:'二盃口', han:3}); han += 3; }
+      else if (pairs === 1) { yakuList.push({name:'一盃口', han:1}); han += 1; }
+    }
+
+    if (allMentsu.every(m => m.type === 'koutsu' || m.type === 'kan')) {
+      yakuList.push({name:'対々和', han:2}); han += 2;
+    }
+
+    let anko = decomp.mentsu.filter(m => m.type === 'koutsu').length;
+    if (anko >= 3) { yakuList.push({name:'三暗刻', han:2}); han += 2; }
+
+    for (let s = 0; s <= 2; s++) {
+      let has123 = allMentsu.some(m => m.type === 'shuntsu' && m.tiles[0].suit === s && m.tiles[0].num === 1);
+      let has456 = allMentsu.some(m => m.type === 'shuntsu' && m.tiles[0].suit === s && m.tiles[0].num === 4);
+      let has789 = allMentsu.some(m => m.type === 'shuntsu' && m.tiles[0].suit === s && m.tiles[0].num === 7);
+      if (has123 && has456 && has789) {
+        let h = isMenzen ? 2 : 1;
+        yakuList.push({name:'一気通貫', han:h}); han += h; break;
+      }
+    }
+
+    let mentsuWithTerminal = allMentsu.every(m => {
+      if (m.type === 'shuntsu') return m.tiles[0].num === 1 || m.tiles[0].num === 7;
+      return m.tiles[0].suit >= 3 || m.tiles[0].num === 1 || m.tiles[0].num === 9;
+    });
+    let jantaiTerminal = decomp.jantai && (decomp.jantai.suit >= 3 || decomp.jantai.num === 1 || decomp.jantai.num === 9);
+    if (mentsuWithTerminal && jantaiTerminal && allMentsu.some(m => m.tiles[0].suit >= 3)) {
+      let h = isMenzen ? 2 : 1;
+      yakuList.push({name:'混全帯么九', han:h}); han += h;
+    }
+
+    for (let n = 1; n <= 7; n++) {
+      let suits = [0,1,2].map(s => allMentsu.some(m => m.type === 'shuntsu' && m.tiles[0].suit === s && m.tiles[0].num === n));
+      if (suits.every(x => x)) {
+        let h = isMenzen ? 2 : 1;
+        yakuList.push({name:'三色同順', han:h}); han += h; break;
+      }
+    }
+
+    let numSuits = new Set();
+    let hasJi = false;
+    for (const t of [...allTiles, ...melds.flatMap(m => m.tiles)]) {
+      if (t.suit <= 2) numSuits.add(t.suit);
+      else hasJi = true;
+    }
+    if (numSuits.size === 1 && hasJi) {
+      let h = isMenzen ? 3 : 2;
+      yakuList.push({name:'混一色', han:h}); han += h;
+    }
+    if (numSuits.size === 1 && !hasJi) {
+      let h = isMenzen ? 6 : 5;
+      yakuList.push({name:'清一色', han:h}); han += h;
+    }
+
+    {
+      let dragonK = 0, dragonJ = false;
+      for (const m of allMentsu) {
+        if ((m.type === 'koutsu' || m.type === 'kan') && m.tiles[0].suit === 4) dragonK++;
+      }
+      if (decomp.jantai && decomp.jantai.suit === 4) dragonJ = true;
+      if (dragonK === 2 && dragonJ) { yakuList.push({name:'小三元', han:2}); han += 2; }
+    }
+  }
+
+  if (isLastTile) {
+    if (isTsumo) { yakuList.push({name:'海底摸月', han:1}); han += 1; }
+    else { yakuList.push({name:'河底撈魚', han:1}); han += 1; }
+  }
+
+  if (isRinshan) { yakuList.push({name:'嶺上開花', han:1}); han += 1; }
+
+  let doraCount = 0;
+  const allTilesWithMelds = [...allTiles, ...melds.flatMap(m => m.tiles)];
+  for (const t of allTilesWithMelds) {
+    if (t.red) doraCount++;
+    for (const d of doraList) {
+      if (t.suit === d.suit && t.num === d.num) doraCount++;
+    }
+  }
+  if (doraCount > 0) { yakuList.push({name:'ドラ', han:doraCount}); han += doraCount; }
+
+  if (isRiichi && uradoraList) {
+    let uraCount = 0;
+    for (const t of allTilesWithMelds) {
+      for (const d of uradoraList) {
+        if (t.suit === d.suit && t.num === d.num) uraCount++;
+      }
+    }
+    if (uraCount > 0) { yakuList.push({name:'裏ドラ', han:uraCount}); han += uraCount; }
+  }
+
+  return {yakuList, han, isYakuman: false};
+}
+
+function decomposeHand(c, meldCount) {
+  let result = null;
+  for (let s = 0; s < 5; s++)
+    for (let n = 1; n <= 9; n++) {
+      if (s >= 3 && n > (s === 3 ? 4 : 3)) continue;
+      if (c[s][n] >= 2) {
+        c[s][n] -= 2;
+        let mentsu = findMentsu(c, 4 - meldCount);
+        if (mentsu) { c[s][n] += 2; return { jantai: {suit:s, num:n}, mentsu }; }
+        c[s][n] += 2;
+      }
+    }
+  return null;
+}
+
+function findMentsu(c, need) {
+  if (need === 0) {
+    for (let s = 0; s < 5; s++)
+      for (let n = 1; n <= 9; n++) if (c[s][n] !== 0) return null;
+    return [];
+  }
+  for (let s = 0; s < 5; s++)
+    for (let n = 1; n <= 9; n++) {
+      if (s >= 3 && n > (s === 3 ? 4 : 3)) continue;
+      if (c[s][n] > 0) {
+        if (c[s][n] >= 3) {
+          c[s][n] -= 3;
+          let rest = findMentsu(c, need - 1);
+          if (rest !== null) { c[s][n] += 3; return [{type:'koutsu', tiles:[{suit:s,num:n},{suit:s,num:n},{suit:s,num:n}]}, ...rest]; }
+          c[s][n] += 3;
+        }
+        if (s <= 2 && n <= 7 && c[s][n+1] > 0 && c[s][n+2] > 0) {
+          c[s][n]--; c[s][n+1]--; c[s][n+2]--;
+          let rest = findMentsu(c, need - 1);
+          if (rest !== null) { c[s][n]++; c[s][n+1]++; c[s][n+2]++; return [{type:'shuntsu', tiles:[{suit:s,num:n},{suit:s,num:n+1},{suit:s,num:n+2}]}, ...rest]; }
+          c[s][n]++; c[s][n+1]++; c[s][n+2]++;
+        }
+        return null;
+      }
+    }
+  return [];
+}
+
+function doraFromIndicator(t) {
+  if (t.suit <= 2) return {suit: t.suit, num: t.num === 9 ? 1 : t.num + 1};
+  if (t.suit === 3) return {suit: 3, num: t.num === 4 ? 1 : t.num + 1};
+  if (t.suit === 4) return {suit: 4, num: t.num === 3 ? 1 : t.num + 1};
+  return t;
+}
+
+// ===== SCORE CALCULATION =====
+function calcFu(decomp, melds, isTsumo, isMenzen, seatWind, roundWind, isChiitoi) {
+  if (isChiitoi) return 25;
+  let fu = 30;
+  if (!isMenzen && !isTsumo) fu = 30;
+  if (isTsumo && isMenzen) {
+    if (decomp) {
+      const allMentsu = [...decomp.mentsu, ...melds.map(m => ({type: m.type === 'pon' ? 'koutsu' : m.type, tiles: m.tiles}))];
+      let allShuntsu = allMentsu.every(m => m.type === 'shuntsu');
+      if (allShuntsu) return 20;
+    }
+  }
+  if (isTsumo) fu += 2;
+  if (isMenzen && !isTsumo) fu = 30;
+  if (!decomp) return fu;
+
+  const allMentsu = [...decomp.mentsu, ...melds.map(m => ({type: m.type === 'pon' ? 'koutsu' : m.type, tiles: m.tiles}))];
+  for (const m of allMentsu) {
+    if (m.type === 'koutsu') {
+      let base = 4;
+      const t0 = m.tiles[0];
+      if (t0.suit >= 3 || t0.num === 1 || t0.num === 9) base = 8;
+      if (decomp.mentsu.includes(m)) base *= 1;
+      else base = Math.floor(base / 2);
+      fu += base;
+    }
+    if (m.type === 'kan') {
+      let base = 16;
+      const t0 = m.tiles[0];
+      if (t0.suit >= 3 || t0.num === 1 || t0.num === 9) base = 32;
+      let isAnkan = melds.some(ml => ml.type === 'ankan' && ml.tiles[0] && tilesEqual(ml.tiles[0], t0));
+      if (!isAnkan) base = Math.floor(base / 2);
+      fu += base;
+    }
+  }
+  if (decomp.jantai) {
+    const j = decomp.jantai;
+    if (j.suit === 4) fu += 2;
+    if (j.suit === 3 && j.num === seatWind) fu += 2;
+    if (j.suit === 3 && j.num === roundWind) fu += 2;
+  }
+  fu = Math.ceil(fu / 10) * 10;
+  return fu;
+}
+
+function calcScore(han, fu, isDealer, isTsumo, isYakuman) {
+  if (isYakuman) {
+    if (isDealer) {
+      if (isTsumo) return {total: 48000, each: 16000};
+      return {total: 48000, each: 0};
+    }
+    if (isTsumo) return {total: 32000, eachKo: 8000, eachOya: 16000};
+    return {total: 32000, each: 0};
+  }
+  let base;
+  if (han >= 13) base = 8000;
+  else if (han >= 11) base = 6000;
+  else if (han >= 8) base = 4000;
+  else if (han >= 6) base = 3000;
+  else if (han >= 5 || (han === 4 && fu >= 30) || (han === 3 && fu >= 70)) base = 2000;
+  else base = fu * Math.pow(2, han + 2);
+  if (base > 2000) base = 2000;
+
+  if (isDealer) {
+    if (isTsumo) { let each = Math.ceil(base * 2 / 100) * 100; return {total: each * 3, each}; }
+    let total = Math.ceil(base * 6 / 100) * 100;
+    return {total, each: 0};
+  } else {
+    if (isTsumo) {
+      let eachKo = Math.ceil(base / 100) * 100;
+      let eachOya = Math.ceil(base * 2 / 100) * 100;
+      return {total: eachKo * 2 + eachOya, eachKo, eachOya};
+    }
+    let total = Math.ceil(base * 4 / 100) * 100;
+    return {total, each: 0};
+  }
+}
+
+function scoreName(han, isYakuman) {
+  if (isYakuman) return '役満';
+  if (han >= 13) return '数え役満';
+  if (han >= 11) return '三倍満';
+  if (han >= 8) return '倍満';
+  if (han >= 6) return '跳満';
+  if (han >= 5) return '満貫';
+  return '';
+}
+
+// ===== CHI / PON / KAN LOGIC =====
+function findChiCombinations(playerIdx, tile) {
+  if (tile.suit > 2) return [];
+  const p = G.players[playerIdx];
+  let combos = [];
+  const hand = p.hand;
+  if (tile.num >= 3) {
+    let t1 = hand.find(h => h.suit === tile.suit && h.num === tile.num - 2);
+    let t2 = hand.find(h => h.suit === tile.suit && h.num === tile.num - 1 && (!t1 || h.id !== t1.id));
+    if (t1 && t2) combos.push([t1, t2, tile]);
+  }
+  if (tile.num >= 2 && tile.num <= 8) {
+    let t1 = hand.find(h => h.suit === tile.suit && h.num === tile.num - 1);
+    let t2 = hand.find(h => h.suit === tile.suit && h.num === tile.num + 1 && (!t1 || h.id !== t1.id));
+    if (t1 && t2) combos.push([t1, t2, tile]);
+  }
+  if (tile.num <= 7) {
+    let t1 = hand.find(h => h.suit === tile.suit && h.num === tile.num + 1);
+    let t2 = hand.find(h => h.suit === tile.suit && h.num === tile.num + 2 && (!t1 || h.id !== t1.id));
+    if (t1 && t2) combos.push([t1, t2, tile]);
+  }
+  return combos;
+}
+
+function executeChi(playerIdx, combo, tile, fromPlayer) {
+  let p = G.players[playerIdx];
+  for (const ct of combo) {
+    if (ct.id === tile.id) continue;
+    let idx = p.hand.findIndex(h => h.id === ct.id);
+    if (idx >= 0) p.hand.splice(idx, 1);
+  }
+  let meldTiles = combo.slice().sort((a,b) => a.num - b.num);
+  p.melds.push({type:'chi', tiles: meldTiles, from: fromPlayer, calledTile: tile});
+  let lastDiscIdx = G.players[fromPlayer].discards.length - 1;
+  if (lastDiscIdx >= 0) G.players[fromPlayer].discards[lastDiscIdx].called = true;
+  for (let i = 0; i < 4; i++) G.players[i].isIppatsu = false;
+  playDahaiSound();
+}
+
+function findAnkanTiles(playerIdx) {
+  const p = G.players[playerIdx];
+  let counts = {};
+  for (const t of p.hand) {
+    let k = tileKey(t);
+    if (!counts[k]) counts[k] = [];
+    counts[k].push(t);
+  }
+  let result = [];
+  for (const k in counts) {
+    if (counts[k].length === 4) result.push(counts[k]);
+  }
+  return result;
+}
+
+function canDaiminkan(playerIdx, tile) {
+  const p = G.players[playerIdx];
+  return p.hand.filter(t => tilesEqual(t, tile)).length >= 3;
+}
+
+function findKakanTiles(playerIdx) {
+  const p = G.players[playerIdx];
+  let result = [];
+  for (const m of p.melds) {
+    if (m.type === 'pon') {
+      let addTile = p.hand.find(t => tilesEqual(t, m.tiles[0]));
+      if (addTile) result.push({meld: m, tile: addTile});
+    }
+  }
+  return result;
+}
+
+function executeAnkan(playerIdx, kanTiles) {
+  let p = G.players[playerIdx];
+  for (const kt of kanTiles) {
+    let idx = p.hand.findIndex(h => h.id === kt.id);
+    if (idx >= 0) p.hand.splice(idx, 1);
+  }
+  p.melds.push({type:'ankan', tiles: kanTiles, from: -1});
+  if (G.doraIndicators.length < 5 && G.deadWall.length > G.doraIndicators.length * 2) {
+    G.doraIndicators.push(G.deadWall[G.doraIndicators.length * 2]);
+  }
+  for (let i = 0; i < 4; i++) G.players[i].isIppatsu = false;
+  playDahaiSound();
+}
+
+function executeDaiminkan(playerIdx, tile, fromPlayer) {
+  let p = G.players[playerIdx];
+  let meldTiles = [tile];
+  let removed = 0;
+  p.hand = p.hand.filter(t => {
+    if (removed < 3 && tilesEqual(t, tile)) { meldTiles.push(t); removed++; return false; }
+    return true;
+  });
+  p.melds.push({type:'daiminkan', tiles: meldTiles, from: fromPlayer});
+  let lastDiscIdx = G.players[fromPlayer].discards.length - 1;
+  if (lastDiscIdx >= 0) G.players[fromPlayer].discards[lastDiscIdx].called = true;
+  if (G.doraIndicators.length < 5 && G.deadWall.length > G.doraIndicators.length * 2) {
+    G.doraIndicators.push(G.deadWall[G.doraIndicators.length * 2]);
+  }
+  for (let i = 0; i < 4; i++) G.players[i].isIppatsu = false;
+  playDahaiSound();
+}
+
+function executeKakan(playerIdx, kakanInfo) {
+  let p = G.players[playerIdx];
+  let idx = p.hand.findIndex(h => h.id === kakanInfo.tile.id);
+  if (idx >= 0) p.hand.splice(idx, 1);
+  kakanInfo.meld.type = 'kakan';
+  kakanInfo.meld.tiles.push(kakanInfo.tile);
+  if (G.doraIndicators.length < 5 && G.deadWall.length > G.doraIndicators.length * 2) {
+    G.doraIndicators.push(G.deadWall[G.doraIndicators.length * 2]);
+  }
+  for (let i = 0; i < 4; i++) G.players[i].isIppatsu = false;
+  playDahaiSound();
+}
+
+function drawFromDeadWall() {
+  let rinshanIdx = 4 + (G.doraIndicators.length - 1);
+  if (rinshanIdx < G.deadWall.length) return G.deadWall[rinshanIdx];
+  return drawTile();
+}
+
+function executePon(playerIdx, tile, fromPlayer) {
+  let p = G.players[playerIdx];
+  let meldTiles = [tile];
+  let removed = 0;
+  p.hand = p.hand.filter(t => {
+    if (removed < 2 && tilesEqual(t, tile)) { meldTiles.push(t); removed++; return false; }
+    return true;
+  });
+  p.melds.push({type:'pon', tiles: meldTiles, from: fromPlayer});
+  let lastDiscIdx = G.players[fromPlayer].discards.length - 1;
+  if (lastDiscIdx >= 0) G.players[fromPlayer].discards[lastDiscIdx].called = true;
+  for (let i = 0; i < 4; i++) G.players[i].isIppatsu = false;
+  playDahaiSound();
+}
+
+// ===== GAME STATE =====
+let G = {};
+let timerInterval = null;
+let timerStart = 0;
+const TURN_TIME = 20000;
+
+function initGame() {
+  G = {
+    wall: [], wallPos: 0, deadWall: [], doraIndicators: [],
+    players: [
+      {name:'あなた', score:25000, hand:[], discards:[], melds:[], isRiichi:false, riichiTurn:-1, isIppatsu:false, isDoubleRiichi:false, seatWind:1},
+      {name:'AI-A', score:25000, hand:[], discards:[], melds:[], isRiichi:false, riichiTurn:-1, isIppatsu:false, isDoubleRiichi:false, seatWind:2},
+      {name:'AI-B', score:25000, hand:[], discards:[], melds:[], isRiichi:false, riichiTurn:-1, isIppatsu:false, isDoubleRiichi:false, seatWind:3},
+      {name:'AI-C', score:25000, hand:[], discards:[], melds:[], isRiichi:false, riichiTurn:-1, isIppatsu:false, isDoubleRiichi:false, seatWind:4}
+    ],
+    currentPlayer: 0, roundWind: 1, roundNum: 1, honba: 0, kyotaku: 0,
+    turnCount: 0, gamePhase: 'idle', selectedTile: -1,
+    tsumoTile: null, lastDiscard: null, lastDiscardPlayer: -1,
+    waitingForInput: false, dealer: 0, totalRounds: 4,
+    discardMeta: [[], [], [], []],
+  };
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timerStart = Date.now();
+  const bar = document.getElementById('timer-progress');
+  bar.style.width = '100%';
+  bar.classList.remove('warning');
+  timerInterval = setInterval(() => {
+    const elapsed = Date.now() - timerStart;
+    const remaining = Math.max(0, TURN_TIME - elapsed);
+    const pct = (remaining / TURN_TIME) * 100;
+    bar.style.width = pct + '%';
+    if (pct < 30) bar.classList.add('warning');
+    else bar.classList.remove('warning');
+    if (remaining <= 0) clearInterval(timerInterval);
+  }, 100);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  const bar = document.getElementById('timer-progress');
+  bar.style.width = '100%';
+  bar.classList.remove('warning');
+}
+
+function startRound() {
+  G.wall = shuffle(createAllTiles());
+  G.wallPos = 0;
+  G.deadWall = [];
+  for (let i = 0; i < 14; i++) G.deadWall.push(G.wall[G.wallPos++]);
+  G.doraIndicators = [G.deadWall[0]];
+
+  for (let p = 0; p < 4; p++) {
+    G.players[p].hand = [];
+    G.players[p].discards = [];
+    G.players[p].melds = [];
+    G.players[p].isRiichi = false;
+    G.players[p].riichiTurn = -1;
+    G.players[p].isIppatsu = false;
+    G.players[p].isDoubleRiichi = false;
+    G.discardMeta[p] = [];
+    for (let i = 0; i < 13; i++) G.players[p].hand.push(G.wall[G.wallPos++]);
+    G.players[p].hand = sortHand(G.players[p].hand);
+  }
+
+  for (let p = 0; p < 4; p++) G.players[p].seatWind = ((p - G.dealer + 4) % 4) + 1;
+
+  G.currentPlayer = G.dealer;
+  G.turnCount = 0;
+  G.tsumoTile = null;
+  G.lastDiscard = null;
+  G.lastDiscardPlayer = -1;
+  G.gamePhase = 'draw';
+
+  document.querySelectorAll('.riichi-line').forEach(el => el.classList.remove('active'));
+  ['opp-riichi','left-riichi','right-riichi'].forEach(id => document.getElementById(id).classList.add('hidden'));
+
+  renderAll();
+  gameLoop();
+}
+
+function drawTile(player) {
+  if (G.wallPos >= G.wall.length) return null;
+  return G.wall[G.wallPos++];
+}
+
+function remainingTiles() { return G.wall.length - G.wallPos; }
+
+// ===== AI LOGIC =====
+function aiChooseDiscard(playerIdx) {
+  const p = G.players[playerIdx];
+  const hand = p.hand.slice();
+  if (p.isRiichi) return hand.length - 1;
+
+  let bestIdx = 0, bestShanten = 99;
+  for (let i = 0; i < hand.length; i++) {
+    let testHand = hand.filter((_, j) => j !== i);
+    let sh = calcShanten(testHand, p.melds.length);
+    if (sh < bestShanten) { bestShanten = sh; bestIdx = i; }
+    else if (sh === bestShanten) {
+      if (tileDefensiveScore(hand[i], playerIdx) > tileDefensiveScore(hand[bestIdx], playerIdx)) bestIdx = i;
+    }
+  }
+  return bestIdx;
+}
+
+function tileDefensiveScore(t, playerIdx) {
+  let score = 0;
+  if (t.suit >= 3) score += 5;
+  if (t.suit <= 2 && (t.num === 1 || t.num === 9)) score += 3;
+  for (let p = 0; p < 4; p++) {
+    if (p === playerIdx) continue;
+    if (G.players[p].isRiichi) {
+      if (G.players[p].discards.some(d => tilesEqual(d, t))) score += 20;
+    }
+  }
+  return score;
+}
+
+function aiShouldRiichi(playerIdx) {
+  const p = G.players[playerIdx];
+  if (p.isRiichi || p.melds.length > 0 || p.score < 1000) return false;
+  for (let i = 0; i < p.hand.length; i++) {
+    let testHand = p.hand.filter((_, j) => j !== i);
+    if (calcShanten(testHand, 0) === 0) {
+      for (let s = 0; s < 5; s++)
+        for (let n = 1; n <= (s >= 3 ? (s === 3 ? 4 : 3) : 9); n++) {
+          let t = {suit:s, num:n, red:false, id:-1};
+          if (isComplete([...testHand, t], 0)) return true;
+        }
+    }
+  }
+  return false;
+}
+
+function aiShouldPon(playerIdx, tile) {
+  const p = G.players[playerIdx];
+  if (p.isRiichi) return false;
+  let count = p.hand.filter(t => tilesEqual(t, tile)).length;
+  if (count < 2) return false;
+  if (tile.suit === 4) return true;
+  if (tile.suit === 3 && tile.num === p.seatWind) return true;
+  if (tile.suit === 3 && tile.num === G.roundWind) return true;
+  let currentShanten = calcShanten(p.hand, p.melds.length);
+  let removed = 0;
+  let afterHand = p.hand.filter(t => { if (removed < 2 && tilesEqual(t, tile)) { removed++; return false; } return true; });
+  return calcShanten(afterHand, p.melds.length + 1) < currentShanten;
+}
+
+function aiShouldChi(playerIdx, tile) {
+  const p = G.players[playerIdx];
+  if (p.isRiichi || tile.suit > 2) return false;
+  let combos = findChiCombinations(playerIdx, tile);
+  if (combos.length === 0) return false;
+  let currentShanten = calcShanten(p.hand, p.melds.length);
+  for (const combo of combos) {
+    let afterHand = p.hand.slice();
+    for (const ct of combo) {
+      if (ct.id === tile.id) continue;
+      let idx = afterHand.findIndex(h => h.id === ct.id);
+      if (idx >= 0) afterHand.splice(idx, 1);
+    }
+    if (calcShanten(afterHand, p.melds.length + 1) < currentShanten) return combos[0];
+  }
+  return false;
+}
+
+function aiShouldDaiminkan(playerIdx, tile) {
+  const p = G.players[playerIdx];
+  if (p.isRiichi) return false;
+  return canDaiminkan(playerIdx, tile);
+}
+
+function canRon(playerIdx, tile) {
+  const p = G.players[playerIdx];
+  let testHand = [...p.hand, tile];
+  if (!isComplete(testHand, p.melds.length)) return false;
+  let eval_ = evaluateYaku(testHand, p.melds, tile, false, p.isRiichi, p.isIppatsu,
+    p.seatWind, G.roundWind, p.isDoubleRiichi,
+    G.doraIndicators.map(d => doraFromIndicator(d)), null, false, false);
+  return eval_.yakuList.length > 0;
+}
+
+function canTsumo(playerIdx) {
+  const p = G.players[playerIdx];
+  if (!isComplete(p.hand, p.melds.length)) return false;
+  let eval_ = evaluateYaku(p.hand, p.melds, G.tsumoTile, true, p.isRiichi, p.isIppatsu,
+    p.seatWind, G.roundWind, p.isDoubleRiichi,
+    G.doraIndicators.map(d => doraFromIndicator(d)),
+    p.isRiichi ? [doraFromIndicator(G.deadWall[1])] : null,
+    remainingTiles() === 0, false);
+  return eval_.yakuList.length > 0;
+}
+
+// ===== GAME LOOP =====
+async function gameLoop() {
+  try {
+    while (G.gamePhase !== 'end' && G.gamePhase !== 'idle') {
+      if (G.gamePhase === 'draw') {
+        if (!(await handleDraw())) return;
+      } else if (G.gamePhase === 'discard') { return; }
+      else if (G.gamePhase === 'call') {
+        if (!(await handleCallPhase())) return;
+      } else if (G.gamePhase === 'agari' || G.gamePhase === 'ryuukyoku') { return; }
+      else break;
+    }
+  } catch(e) { console.error('gameLoop error:', e); }
+}
+
+async function handleDraw() {
+  if (remainingTiles() === 0) { await handleRyuukyoku(); return false; }
+
+  let p = G.players[G.currentPlayer];
+  let tile = drawTile(G.currentPlayer);
+  G.tsumoTile = tile;
+  p.hand.push(tile);
+  G.turnCount++;
+
+  if (G.currentPlayer === 0) playTsumoSound();
+
+  for (let i = 0; i < 4; i++) {
+    if (G.players[i].isIppatsu && G.turnCount - G.players[i].riichiTurn > 4) G.players[i].isIppatsu = false;
+  }
+
+  renderAll();
+
+  if (canTsumo(G.currentPlayer)) {
+    if (G.currentPlayer === 0) {
+      G.gamePhase = 'discard';
+      showPlayerTsumoOption();
+      startTimer();
+      return false;
+    } else {
+      await delay(getAiDelay() * 0.75);
+      await handleAgari(G.currentPlayer, G.currentPlayer, true);
+      return false;
+    }
+  }
+
+  if (G.currentPlayer === 0) {
+    G.gamePhase = 'discard';
+    G.waitingForInput = true;
+    showPlayerActions();
+    startTimer();
+    renderAll();
+    return false;
+  }
+
+  await delay(getAiDelay());
+
+  // AI ankan
+  let ankanTiles = findAnkanTiles(G.currentPlayer);
+  if (ankanTiles.length > 0 && !p.isRiichi) {
+    executeAnkan(G.currentPlayer, ankanTiles[0]);
+    renderAll();
+    await delay(getAiDelay() * 0.75);
+    let rinshanTile = drawFromDeadWall();
+    if (rinshanTile) {
+      G.tsumoTile = rinshanTile;
+      p.hand.push(rinshanTile);
+      if (canTsumo(G.currentPlayer)) { await delay(getAiDelay() * 0.75); await handleAgari(G.currentPlayer, G.currentPlayer, true); return false; }
+    }
+    renderAll();
+  }
+
+  // AI kakan
+  let kakanTiles = findKakanTiles(G.currentPlayer);
+  if (kakanTiles.length > 0 && !p.isRiichi) {
+    executeKakan(G.currentPlayer, kakanTiles[0]);
+    renderAll();
+    await delay(getAiDelay() * 0.75);
+    let rinshanTile = drawFromDeadWall();
+    if (rinshanTile) {
+      G.tsumoTile = rinshanTile;
+      p.hand.push(rinshanTile);
+      if (canTsumo(G.currentPlayer)) { await delay(getAiDelay() * 0.75); await handleAgari(G.currentPlayer, G.currentPlayer, true); return false; }
+    }
+    renderAll();
+  }
+
+  // AI riichi
+  if (aiShouldRiichi(G.currentPlayer)) {
+    p.isRiichi = true;
+    p.riichiTurn = G.turnCount;
+    p.isIppatsu = true;
+    p.score -= 1000;
+    G.kyotaku++;
+    showRiichiLine(G.currentPlayer);
+    showRiichiMark(G.currentPlayer);
+    playRiichiSound();
+    await delay(getAiDelay() * 0.75);
+  }
+
+  let discIdx = aiChooseDiscard(G.currentPlayer);
+  let discTile = p.hand.splice(discIdx, 1)[0];
+  let isTsumogiri = G.tsumoTile && discTile.id === G.tsumoTile.id;
+  p.hand = sortHand(p.hand);
+  p.discards.push(discTile);
+  G.discardMeta[G.currentPlayer].push({isTsumogiri});
+  G.lastDiscard = discTile;
+  G.lastDiscardPlayer = G.currentPlayer;
+
+  playDahaiSound();
+  renderAll();
+
+  G.gamePhase = 'call';
+  return true;
+}
+
+async function handleCallPhase() {
+  let tile = G.lastDiscard;
+  let fromPlayer = G.lastDiscardPlayer;
+
+  // Check ron
+  let ronPlayers = [];
+  for (let i = 0; i < 4; i++) {
+    if (i === fromPlayer) continue;
+    if (canRon(i, tile)) ronPlayers.push(i);
+  }
+
+  if (ronPlayers.length > 0) {
+    if (ronPlayers.includes(0)) {
+      G.waitingForInput = true;
+      showRonOption(tile, fromPlayer);
+      startTimer();
+      return false;
+    }
+    let ronner = ronPlayers[0];
+    await delay(getAiDelay() * 0.75);
+    G.players[ronner].hand.push(tile);
+    await handleAgari(ronner, fromPlayer, false);
+    return false;
+  }
+
+  // Check pon/kan for player
+  if (fromPlayer !== 0) {
+    let p = G.players[0];
+    let ponCount = p.hand.filter(t => tilesEqual(t, tile)).length;
+    if (ponCount >= 3 && !p.isRiichi) {
+      G.waitingForInput = true;
+      showDaiminkanOption(tile, fromPlayer);
+      startTimer();
+      return false;
+    }
+    if (ponCount >= 2 && !p.isRiichi) {
+      G.waitingForInput = true;
+      showPonOption(tile, fromPlayer);
+      startTimer();
+      return false;
+    }
+  }
+
+  // AI pon/kan
+  for (let i = 1; i < 4; i++) {
+    if (i === fromPlayer) continue;
+    if (aiShouldDaiminkan(i, tile) && !G.players[i].isRiichi) {
+      await delay(getAiDelay() * 0.75);
+      executeDaiminkan(i, tile, fromPlayer);
+      renderAll();
+      await delay(getAiDelay() * 0.75);
+      G.currentPlayer = i;
+      let rinshanTile = drawFromDeadWall();
+      if (rinshanTile) {
+        G.tsumoTile = rinshanTile;
+        G.players[i].hand.push(rinshanTile);
+        if (canTsumo(i)) { await delay(getAiDelay() * 0.75); await handleAgari(i, i, true); return false; }
+      }
+      let discIdx = aiChooseDiscard(i);
+      let discTile = G.players[i].hand.splice(discIdx, 1)[0];
+      G.players[i].hand = sortHand(G.players[i].hand);
+      G.players[i].discards.push(discTile);
+      G.discardMeta[i].push({isTsumogiri: false});
+      G.lastDiscard = discTile;
+      G.lastDiscardPlayer = i;
+      playDahaiSound();
+      renderAll();
+      G.gamePhase = 'call';
+      return true;
+    }
+    if (aiShouldPon(i, tile)) {
+      await delay(getAiDelay() * 0.75);
+      executePon(i, tile, fromPlayer);
+      renderAll();
+      await delay(getAiDelay() * 0.75);
+      G.currentPlayer = i;
+      let discIdx = aiChooseDiscard(i);
+      let discTile = G.players[i].hand.splice(discIdx, 1)[0];
+      G.players[i].hand = sortHand(G.players[i].hand);
+      G.players[i].discards.push(discTile);
+      G.discardMeta[i].push({isTsumogiri: false});
+      G.lastDiscard = discTile;
+      G.lastDiscardPlayer = i;
+      playDahaiSound();
+      renderAll();
+      G.gamePhase = 'call';
+      return true;
+    }
+  }
+
+  // Chi for player
+  let kamicha = (0 + 4 - 1) % 4;
+  if (fromPlayer === kamicha && !G.players[0].isRiichi) {
+    let combos = findChiCombinations(0, tile);
+    if (combos.length > 0) {
+      G.waitingForInput = true;
+      showChiOption(tile, fromPlayer, combos);
+      startTimer();
+      return false;
+    }
+  }
+
+  // AI chi
+  for (let i = 1; i < 4; i++) {
+    let aiKamicha = (i + 4 - 1) % 4;
+    if (fromPlayer === aiKamicha) {
+      let chiResult = aiShouldChi(i, tile);
+      if (chiResult) {
+        await delay(getAiDelay() * 0.75);
+        executeChi(i, chiResult, tile, fromPlayer);
+        renderAll();
+        await delay(getAiDelay() * 0.75);
+        G.currentPlayer = i;
+        let discIdx = aiChooseDiscard(i);
+        let discTile = G.players[i].hand.splice(discIdx, 1)[0];
+        G.players[i].hand = sortHand(G.players[i].hand);
+        G.players[i].discards.push(discTile);
+        G.discardMeta[i].push({isTsumogiri: false});
+        G.lastDiscard = discTile;
+        G.lastDiscardPlayer = i;
+        playDahaiSound();
+        renderAll();
+        G.gamePhase = 'call';
+        return true;
+      }
+    }
+  }
+
+  G.currentPlayer = (G.currentPlayer + 1) % 4;
+  G.gamePhase = 'draw';
+  return true;
+}
+
+async function handleAgari(winner, fromPlayer, isTsumo) {
+  G.gamePhase = 'agari';
+  stopTimer();
+  playAgariSound();
+  let p = G.players[winner];
+  let winTile = isTsumo ? G.tsumoTile : G.lastDiscard;
+
+  let doraList = G.doraIndicators.map(d => doraFromIndicator(d));
+  let uradoraList = p.isRiichi ? [doraFromIndicator(G.deadWall[1])] : null;
+
+  let eval_ = evaluateYaku(p.hand, p.melds, winTile, isTsumo, p.isRiichi, p.isIppatsu,
+    p.seatWind, G.roundWind, p.isDoubleRiichi, doraList, uradoraList,
+    remainingTiles() === 0, false);
+
+  let isChiitoi = p.melds.length === 0 && isCompleteChiitoi(handToCount(p.hand));
+  let decomp = decomposeHand(handToCount(p.hand.filter(t => t.id !== (isTsumo && G.tsumoTile ? G.tsumoTile.id : -999))), p.melds.length);
+
+  let fu = calcFu(decomp, p.melds, isTsumo, p.melds.length === 0, p.seatWind, G.roundWind, isChiitoi);
+  let isDealer = p.seatWind === 1;
+  let score = calcScore(eval_.han, fu, isDealer, isTsumo, eval_.isYakuman);
+
+  let honbaBonus = G.honba * 300;
+  score.total += honbaBonus;
+
+  showAgariOverlay(winner, fromPlayer, isTsumo, p.hand, p.melds, eval_, fu, score);
+}
+
+function showAgariOverlay(winner, fromPlayer, isTsumo, hand, melds, eval_, fu, score) {
+  const overlay = document.getElementById('agari-overlay');
+  overlay.classList.remove('hidden', 'tier-normal', 'tier-mangan', 'tier-yakuman');
+
+  let tier = 'normal';
+  if (eval_.isYakuman) tier = 'yakuman';
+  else if (eval_.han >= 5) tier = 'mangan';
+
+  if (Settings.effectsEnabled) {
+    overlay.classList.add('tier-' + tier);
+  }
+
+  let showDelay = Settings.effectsEnabled ? (tier === 'yakuman' ? 800 : (tier === 'mangan' ? 400 : 100)) : 50;
+  setTimeout(() => overlay.classList.add('show'), showDelay);
+
+  const typeEl = document.getElementById('agari-type');
+  let typeText = isTsumo ? 'ツモ' : 'ロン';
+  if (tier === 'yakuman') typeText = scoreName(eval_.han, eval_.isYakuman);
+  else if (tier === 'mangan') typeText = scoreName(eval_.han, false) + ' ' + typeText;
+  typeEl.textContent = typeText;
+
+  const handEl = document.getElementById('agari-hand');
+  handEl.innerHTML = '';
+  for (const m of melds) {
+    for (const t of m.tiles) {
+      let div = createTileElement(t, false, true);
+      div.style.width = '32px'; div.style.height = '44px'; div.style.fontSize = '13px';
+      handEl.appendChild(div);
+    }
+    let spacer = document.createElement('div');
+    spacer.style.width = '8px';
+    handEl.appendChild(spacer);
+  }
+  let sortedHand = sortHand(hand);
+  for (const t of sortedHand) {
+    let div = createTileElement(t, false, true);
+    div.style.width = '36px'; div.style.height = '50px'; div.style.fontSize = '15px';
+    handEl.appendChild(div);
+  }
+
+  const yakuEl = document.getElementById('yaku-list');
+  yakuEl.innerHTML = '';
+  for (const y of eval_.yakuList) {
+    let row = document.createElement('div');
+    row.className = 'yaku-row';
+    row.setAttribute('role', 'listitem');
+    row.innerHTML = `<span class="yn">${y.name}</span><span class="yh">${y.isYakuman ? '役満' : y.han + '翻'}</span>`;
+    yakuEl.appendChild(row);
+  }
+  let sn = scoreName(eval_.han, eval_.isYakuman);
+  let totalRow = document.createElement('div');
+  totalRow.className = 'yaku-total';
+  totalRow.innerHTML = `<span class="yn">${sn ? sn + ' ' : ''}${fu}符${eval_.han}翻</span><span class="yh">${score.total}点</span>`;
+  yakuEl.appendChild(totalRow);
+
+  if (tier === 'yakuman' && Settings.effectsEnabled) startGoldParticles();
+
+  G.agariData = {winner, fromPlayer, isTsumo, score, eval_};
+}
+
+let particleAnimId = null;
+function startGoldParticles() {
+  const canvas = document.getElementById('agari-particles');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  let particles = [];
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x: Math.random() * canvas.width, y: -Math.random() * canvas.height,
+      size: Math.random() * 4 + 1, speedY: Math.random() * 1.5 + 0.5,
+      speedX: (Math.random() - 0.5) * 0.8,
+      opacity: Math.random() * 0.8 + 0.2, hue: Math.random() * 30 + 35,
+    });
+  }
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const p of particles) {
+      p.y += p.speedY; p.x += p.speedX;
+      if (p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${p.hue}, 70%, 60%, ${p.opacity})`; ctx.fill();
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${p.hue}, 70%, 60%, ${p.opacity * 0.2})`; ctx.fill();
+    }
+    particleAnimId = requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+function stopGoldParticles() {
+  if (particleAnimId) { cancelAnimationFrame(particleAnimId); particleAnimId = null; }
+  const canvas = document.getElementById('agari-particles');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function nextAfterAgari() {
+  const {winner, fromPlayer, isTsumo, score} = G.agariData;
+
+  if (isTsumo) {
+    let isDealer = G.players[winner].seatWind === 1;
+    for (let i = 0; i < 4; i++) {
+      if (i === winner) { G.players[i].score += score.total + G.kyotaku * 1000; }
+      else {
+        if (isDealer) G.players[i].score -= score.each;
+        else G.players[i].score -= (G.players[i].seatWind === 1 ? score.eachOya : score.eachKo);
+      }
+    }
+  } else {
+    G.players[winner].score += score.total + G.kyotaku * 1000;
+    G.players[fromPlayer].score -= score.total;
+  }
+
+  G.kyotaku = 0;
+  stopGoldParticles();
+
+  const overlay = document.getElementById('agari-overlay');
+  overlay.classList.remove('show');
+  setTimeout(() => { overlay.classList.add('hidden'); overlay.classList.remove('tier-normal', 'tier-mangan', 'tier-yakuman'); }, 500);
+
+  let dealerWon = G.players[winner].seatWind === 1;
+  if (dealerWon) { G.honba++; }
+  else { G.honba = 0; G.roundNum++; G.dealer = (G.dealer + 1) % 4; }
+
+  if (G.roundNum > G.totalRounds) { showFinalResult(); return; }
+  for (let i = 0; i < 4; i++) { if (G.players[i].score < 0) { showFinalResult(); return; } }
+
+  setTimeout(() => startRound(), 600);
+}
+
+async function handleRyuukyoku() {
+  G.gamePhase = 'ryuukyoku';
+  stopTimer();
+
+  let tenpai = [];
+  for (let i = 0; i < 4; i++) tenpai.push(calcShanten(G.players[i].hand, G.players[i].melds.length) === 0);
+
+  let tenpaiCount = tenpai.filter(x => x).length;
+  if (tenpaiCount > 0 && tenpaiCount < 4) {
+    if (tenpaiCount === 1) { for (let i = 0; i < 4; i++) G.players[i].score += tenpai[i] ? 3000 : -1000; }
+    else if (tenpaiCount === 2) { for (let i = 0; i < 4; i++) G.players[i].score += tenpai[i] ? 1500 : -1500; }
+    else if (tenpaiCount === 3) { for (let i = 0; i < 4; i++) G.players[i].score += tenpai[i] ? 1000 : -3000; }
+  }
+
+  const overlay = document.getElementById('agari-overlay');
+  overlay.classList.remove('hidden', 'tier-normal', 'tier-mangan', 'tier-yakuman');
+  setTimeout(() => overlay.classList.add('show'), 10);
+
+  document.getElementById('agari-type').textContent = '流局';
+  document.getElementById('agari-hand').innerHTML = '';
+
+  const yakuEl = document.getElementById('yaku-list');
+  yakuEl.innerHTML = '';
+  for (let i = 0; i < 4; i++) {
+    let row = document.createElement('div');
+    row.className = 'yaku-row';
+    row.innerHTML = `<span class="yn">${G.players[i].name}</span><span class="yh">${tenpai[i] ? 'テンパイ' : 'ノーテン'}</span>`;
+    yakuEl.appendChild(row);
+  }
+
+  G.agariData = {isRyuukyoku: true, tenpai};
+
+  const btn = document.getElementById('agari-btn');
+  btn.onclick = function() {
+    overlay.classList.remove('show');
+    setTimeout(() => { overlay.classList.add('hidden'); overlay.classList.remove('tier-normal', 'tier-mangan', 'tier-yakuman'); }, 500);
+
+    let dealerTenpai = tenpai[G.dealer];
+    if (dealerTenpai) { G.honba++; }
+    else { G.honba++; G.roundNum++; G.dealer = (G.dealer + 1) % 4; }
+
+    if (G.roundNum > G.totalRounds) { showFinalResult(); return; }
+
+    setTimeout(() => { btn.onclick = nextAfterAgari; startRound(); }, 600);
+  };
+}
+
+function showFinalResult() {
+  G.gamePhase = 'end';
+  stopTimer();
+  const screen = document.getElementById('result-screen');
+  screen.classList.remove('hidden');
+
+  let sorted = G.players.slice().sort((a, b) => b.score - a.score);
+  const scoresEl = document.getElementById('result-scores');
+  scoresEl.innerHTML = '';
+  sorted.forEach((p, i) => {
+    let row = document.createElement('div');
+    row.className = 'score-row';
+    row.innerHTML = `<span class="rank">${i+1}</span><span class="name">${p.name}</span><span class="pts">${p.score.toLocaleString()}</span>`;
+    scoresEl.appendChild(row);
+  });
+
+  // Determine player rank and score
+  let playerRank = sorted.findIndex(p => p.name === 'あなた') + 1;
+  let playerScore = G.players[0].score;
+  lastResultData = {rank: playerRank, score: playerScore};
+  recordResult(playerRank, playerScore);
+  updateTitleStats();
+}
+
+// ===== PLAYER INPUT =====
+function showPlayerActions() {
+  const btnArea = document.getElementById('btn-area');
+  btnArea.innerHTML = '';
+  let p = G.players[0];
+
+  if (!p.isRiichi) {
+    let ankanTiles = findAnkanTiles(0);
+    for (const kanGroup of ankanTiles) {
+      let btn = document.createElement('button');
+      btn.className = 'action-btn btn-kan';
+      btn.textContent = '暗槓';
+      btn.setAttribute('aria-label', '暗槓する (' + tileLabel(kanGroup[0]) + ')');
+      btn.onclick = () => {
+        btnArea.innerHTML = ''; stopTimer();
+        executeAnkan(0, kanGroup); renderAll();
+        let rinshanTile = drawFromDeadWall();
+        if (rinshanTile) {
+          G.tsumoTile = rinshanTile; p.hand.push(rinshanTile); renderAll();
+          if (canTsumo(0)) { showPlayerTsumoOption(); startTimer(); return; }
+        }
+        G.waitingForInput = true; showPlayerActions(); startTimer();
+      };
+      btnArea.appendChild(btn);
+    }
+
+    let kakanTiles = findKakanTiles(0);
+    for (const kk of kakanTiles) {
+      let btn = document.createElement('button');
+      btn.className = 'action-btn btn-kan';
+      btn.textContent = '加槓';
+      btn.setAttribute('aria-label', '加槓する (' + tileLabel(kk.tile) + ')');
+      btn.onclick = () => {
+        btnArea.innerHTML = ''; stopTimer();
+        executeKakan(0, kk); renderAll();
+        let rinshanTile = drawFromDeadWall();
+        if (rinshanTile) {
+          G.tsumoTile = rinshanTile; p.hand.push(rinshanTile); renderAll();
+          if (canTsumo(0)) { showPlayerTsumoOption(); startTimer(); return; }
+        }
+        G.waitingForInput = true; showPlayerActions(); startTimer();
+      };
+      btnArea.appendChild(btn);
+    }
+  }
+
+  if (!p.isRiichi && p.melds.length === 0 && p.score >= 1000) {
+    let canDeclareRiichi = false;
+    for (let i = 0; i < p.hand.length; i++) {
+      let testHand = p.hand.filter((_, j) => j !== i);
+      if (calcShanten(testHand, 0) === 0) {
+        for (let s = 0; s < 5; s++)
+          for (let n = 1; n <= (s >= 3 ? (s === 3 ? 4 : 3) : 9); n++) {
+            if (isComplete([...testHand, {suit:s, num:n, red:false, id:-1}], 0)) canDeclareRiichi = true;
+          }
+      }
+    }
+    if (canDeclareRiichi) {
+      let btn = document.createElement('button');
+      btn.className = 'action-btn btn-riichi';
+      btn.textContent = '立直';
+      btn.setAttribute('aria-label', '立直を宣言する');
+      btn.onclick = () => declareRiichi();
+      btnArea.appendChild(btn);
+    }
+  }
+  renderAll();
+}
+
+function showPlayerTsumoOption() {
+  const btnArea = document.getElementById('btn-area');
+  btnArea.innerHTML = '';
+  let btn = document.createElement('button');
+  btn.className = 'action-btn btn-tsumo';
+  btn.textContent = 'ツモ';
+  btn.setAttribute('aria-label', 'ツモ和了する');
+  btn.onclick = () => playerTsumo();
+  btnArea.appendChild(btn);
+  let passBtn = document.createElement('button');
+  passBtn.className = 'action-btn btn-pass';
+  passBtn.textContent = 'パス';
+  passBtn.setAttribute('aria-label', 'ツモをパスする');
+  passBtn.onclick = () => { btnArea.innerHTML = ''; G.waitingForInput = true; showPlayerActions(); };
+  btnArea.appendChild(passBtn);
+  G.waitingForInput = true;
+  renderAll();
+}
+
+function showRonOption(tile, fromPlayer) {
+  const btnArea = document.getElementById('btn-area');
+  let btn = document.createElement('button');
+  btn.className = 'action-btn btn-ron';
+  btn.textContent = 'ロン';
+  btn.setAttribute('aria-label', 'ロン和了する');
+  btn.onclick = () => { btnArea.innerHTML = ''; stopTimer(); G.players[0].hand.push(tile); handleAgari(0, fromPlayer, false); };
+  btnArea.appendChild(btn);
+  let passBtn = document.createElement('button');
+  passBtn.className = 'action-btn btn-pass';
+  passBtn.textContent = 'パス';
+  passBtn.setAttribute('aria-label', 'ロンをパスする');
+  passBtn.onclick = () => { btnArea.innerHTML = ''; stopTimer(); G.waitingForInput = false; continueAfterCallCheck(fromPlayer); };
+  btnArea.appendChild(passBtn);
+}
+
+function showPonOption(tile, fromPlayer) {
+  const btnArea = document.getElementById('btn-area');
+  let kamicha = (0 + 4 - 1) % 4;
+  let chiCombos = (fromPlayer === kamicha) ? findChiCombinations(0, tile) : [];
+
+  let btn = document.createElement('button');
+  btn.className = 'action-btn btn-pon'; btn.textContent = 'ポン';
+  btn.setAttribute('aria-label', 'ポンする');
+  btn.onclick = () => {
+    btnArea.innerHTML = ''; stopTimer();
+    executePon(0, tile, fromPlayer);
+    G.currentPlayer = 0; G.waitingForInput = true; G.gamePhase = 'discard';
+    renderAll(); showPlayerActions(); startTimer();
+  };
+  btnArea.appendChild(btn);
+
+  for (let ci = 0; ci < chiCombos.length; ci++) {
+    let combo = chiCombos[ci];
+    let chiBtn = document.createElement('button');
+    chiBtn.className = 'action-btn btn-chi';
+    let handTiles = combo.filter(c => c.id !== tile.id);
+    chiBtn.textContent = 'チー(' + handTiles.map(t => tileDisplay(t)).join('') + ')';
+    chiBtn.setAttribute('aria-label', 'チーする');
+    chiBtn.onclick = () => {
+      btnArea.innerHTML = ''; stopTimer();
+      executeChi(0, combo, tile, fromPlayer);
+      G.currentPlayer = 0; G.waitingForInput = true; G.gamePhase = 'discard';
+      renderAll(); showPlayerActions(); startTimer();
+    };
+    btnArea.appendChild(chiBtn);
+  }
+
+  let passBtn = document.createElement('button');
+  passBtn.className = 'action-btn btn-pass'; passBtn.textContent = 'パス';
+  passBtn.onclick = () => { btnArea.innerHTML = ''; stopTimer(); G.waitingForInput = false; continueAfterCallCheck(fromPlayer); };
+  btnArea.appendChild(passBtn);
+}
+
+function showChiOption(tile, fromPlayer, combos) {
+  const btnArea = document.getElementById('btn-area');
+  for (const combo of combos) {
+    let btn = document.createElement('button');
+    btn.className = 'action-btn btn-chi';
+    let handTiles = combo.filter(c => c.id !== tile.id);
+    btn.textContent = 'チー(' + handTiles.map(t => tileDisplay(t)).join('') + ')';
+    btn.setAttribute('aria-label', 'チーする');
+    btn.onclick = () => {
+      btnArea.innerHTML = ''; stopTimer();
+      executeChi(0, combo, tile, fromPlayer);
+      G.currentPlayer = 0; G.waitingForInput = true; G.gamePhase = 'discard';
+      renderAll(); showPlayerActions(); startTimer();
+    };
+    btnArea.appendChild(btn);
+  }
+  let passBtn = document.createElement('button');
+  passBtn.className = 'action-btn btn-pass'; passBtn.textContent = 'パス';
+  passBtn.onclick = () => {
+    btnArea.innerHTML = ''; stopTimer(); G.waitingForInput = false;
+    G.currentPlayer = (fromPlayer + 1) % 4; G.gamePhase = 'draw'; gameLoop();
+  };
+  btnArea.appendChild(passBtn);
+}
+
+function showDaiminkanOption(tile, fromPlayer) {
+  const btnArea = document.getElementById('btn-area');
+  let kanBtn = document.createElement('button');
+  kanBtn.className = 'action-btn btn-kan'; kanBtn.textContent = '大明槓';
+  kanBtn.onclick = () => {
+    btnArea.innerHTML = ''; stopTimer();
+    executeDaiminkan(0, tile, fromPlayer);
+    G.currentPlayer = 0; renderAll();
+    let rinshanTile = drawFromDeadWall();
+    if (rinshanTile) {
+      G.tsumoTile = rinshanTile; G.players[0].hand.push(rinshanTile); renderAll();
+      if (canTsumo(0)) { G.gamePhase = 'discard'; showPlayerTsumoOption(); startTimer(); return; }
+    }
+    G.waitingForInput = true; G.gamePhase = 'discard'; showPlayerActions(); startTimer();
+  };
+  btnArea.appendChild(kanBtn);
+
+  let ponBtn = document.createElement('button');
+  ponBtn.className = 'action-btn btn-pon'; ponBtn.textContent = 'ポン';
+  ponBtn.onclick = () => {
+    btnArea.innerHTML = ''; stopTimer();
+    executePon(0, tile, fromPlayer);
+    G.currentPlayer = 0; G.waitingForInput = true; G.gamePhase = 'discard';
+    renderAll(); showPlayerActions(); startTimer();
+  };
+  btnArea.appendChild(ponBtn);
+
+  let kamicha = (0 + 4 - 1) % 4;
+  if (fromPlayer === kamicha) {
+    let chiCombos = findChiCombinations(0, tile);
+    for (const combo of chiCombos) {
+      let chiBtn = document.createElement('button');
+      chiBtn.className = 'action-btn btn-chi';
+      let handTiles = combo.filter(c => c.id !== tile.id);
+      chiBtn.textContent = 'チー(' + handTiles.map(t => tileDisplay(t)).join('') + ')';
+      chiBtn.onclick = () => {
+        btnArea.innerHTML = ''; stopTimer();
+        executeChi(0, combo, tile, fromPlayer);
+        G.currentPlayer = 0; G.waitingForInput = true; G.gamePhase = 'discard';
+        renderAll(); showPlayerActions(); startTimer();
+      };
+      btnArea.appendChild(chiBtn);
+    }
+  }
+
+  let passBtn = document.createElement('button');
+  passBtn.className = 'action-btn btn-pass'; passBtn.textContent = 'パス';
+  passBtn.onclick = () => { btnArea.innerHTML = ''; stopTimer(); G.waitingForInput = false; continueAfterCallCheck(fromPlayer); };
+  btnArea.appendChild(passBtn);
+}
+
+async function continueAfterCallCheck(fromPlayer) {
+  for (let i = 1; i < 4; i++) {
+    if (i === fromPlayer) continue;
+    if (aiShouldPon(i, G.lastDiscard)) {
+      await delay(getAiDelay() * 0.75);
+      executePon(i, G.lastDiscard, fromPlayer); renderAll();
+      await delay(getAiDelay() * 0.75);
+      G.currentPlayer = i;
+      let discIdx = aiChooseDiscard(i);
+      let discTile = G.players[i].hand.splice(discIdx, 1)[0];
+      G.players[i].hand = sortHand(G.players[i].hand);
+      G.players[i].discards.push(discTile);
+      G.discardMeta[i].push({isTsumogiri: false});
+      G.lastDiscard = discTile; G.lastDiscardPlayer = i;
+      playDahaiSound(); renderAll();
+      G.gamePhase = 'call'; gameLoop(); return;
+    }
+  }
+  for (let i = 1; i < 4; i++) {
+    let aiKamicha = (i + 4 - 1) % 4;
+    if (fromPlayer === aiKamicha) {
+      let chiResult = aiShouldChi(i, G.lastDiscard);
+      if (chiResult) {
+        await delay(getAiDelay() * 0.75);
+        executeChi(i, chiResult, G.lastDiscard, fromPlayer); renderAll();
+        await delay(getAiDelay() * 0.75);
+        G.currentPlayer = i;
+        let discIdx = aiChooseDiscard(i);
+        let discTile = G.players[i].hand.splice(discIdx, 1)[0];
+        G.players[i].hand = sortHand(G.players[i].hand);
+        G.players[i].discards.push(discTile);
+        G.discardMeta[i].push({isTsumogiri: false});
+        G.lastDiscard = discTile; G.lastDiscardPlayer = i;
+        playDahaiSound(); renderAll();
+        G.gamePhase = 'call'; gameLoop(); return;
+      }
+    }
+  }
+  G.currentPlayer = (fromPlayer + 1) % 4;
+  G.gamePhase = 'draw';
+  gameLoop();
+}
+
+function declareRiichi() {
+  let p = G.players[0];
+  p.isRiichi = true;
+  p.riichiTurn = G.turnCount;
+  p.isIppatsu = true;
+  p.score -= 1000;
+  G.kyotaku++;
+  showRiichiLine(0);
+  playRiichiSound();
+  renderAll();
+
+  let validDiscards = [];
+  for (let i = 0; i < p.hand.length; i++) {
+    let testHand = p.hand.filter((_, j) => j !== i);
+    if (calcShanten(testHand, 0) === 0) validDiscards.push(i);
+  }
+  const handArea = document.getElementById('hand-area');
+  const tiles = handArea.querySelectorAll('.hand-tile');
+  tiles.forEach((el, i) => { if (!validDiscards.includes(i)) el.classList.add('riichi-dim'); });
+}
+
+async function playerTsumo() {
+  document.getElementById('btn-area').innerHTML = '';
+  G.waitingForInput = false; stopTimer();
+  await handleAgari(0, 0, true);
+}
+
+function playerDiscard(index) {
+  if (!G.waitingForInput || G.currentPlayer !== 0 || G.gamePhase !== 'discard') return;
+  let p = G.players[0];
+  if (p.isRiichi) {
+    let testHand = p.hand.filter((_, j) => j !== index);
+    if (calcShanten(testHand, 0) !== 0) return;
+  }
+  let discTile = p.hand.splice(index, 1)[0];
+  let isTsumogiri = G.tsumoTile && discTile.id === G.tsumoTile.id;
+  p.hand = sortHand(p.hand);
+  if (p.isRiichi && p.discards.filter(d => !d.called).length === p.riichiTurn - 1) discTile.riichiMark = true;
+  p.discards.push(discTile);
+  G.discardMeta[0].push({isTsumogiri});
+  G.lastDiscard = discTile; G.lastDiscardPlayer = 0;
+  G.waitingForInput = false; G.selectedTile = -1; stopTimer();
+  playDahaiSound();
+  document.getElementById('btn-area').innerHTML = '';
+  renderAll();
+  G.gamePhase = 'call'; gameLoop();
+}
+
+// ===== RENDER =====
+function createTileElement(t, isHand, showFace) {
+  let div = document.createElement('div');
+  if (isHand) {
+    div.className = 'hand-tile';
+    if (t.red) div.classList.add('red-dora');
+    div.setAttribute('aria-label', tileLabel(t));
+  } else {
+    div.className = 'disc-tile normal';
+    if (t.red) div.classList.add('red-tile');
+  }
+  if (showFace) {
+    div.textContent = tileDisplay(t);
+    div.style.color = tileColor(t);
+    if (isHand) div.style.backgroundColor = t.red ? '#F5EDE0' : '#F0EBDB';
+    if (t.red) div.style.color = '#A02020';
+  }
+  return div;
+}
+
+function renderAll() {
+  renderInfoBar(); renderCenterPanel(); renderOpponent();
+  renderSidePanels(); renderDiscards(); renderHand(); renderShantenDisplay();
+}
+
+function renderInfoBar() {
+  const remain = remainingTiles();
+  const remainEl = document.getElementById('remain-count');
+  remainEl.textContent = remain;
+  if (remain <= 10) remainEl.classList.add('warning');
+  else remainEl.classList.remove('warning');
+
+  document.getElementById('round-info').textContent = WIND_NAMES[G.roundWind] + G.roundNum + '局';
+  document.getElementById('honba-info').textContent = G.honba + '本場' + (G.kyotaku > 0 ? ' 供託' + G.kyotaku + '本' : '');
+
+  const doraEl = document.getElementById('dora-tiles');
+  doraEl.innerHTML = '';
+  for (let i = 0; i < 5; i++) {
+    let div = document.createElement('div');
+    div.className = 'dora-tile';
+    if (i < G.doraIndicators.length) {
+      let t = G.doraIndicators[i];
+      div.textContent = tileDisplay(t);
+      div.style.color = tileColor(t);
+      div.classList.add('shown');
+      div.setAttribute('aria-label', 'ドラ表示牌: ' + tileLabel(t));
+    } else {
+      div.classList.add('back');
+      div.setAttribute('aria-hidden', 'true');
+    }
+    doraEl.appendChild(div);
+  }
+}
+
+function renderShantenDisplay() {
+  const shantenEl = document.getElementById('shanten-display');
+  const machiEl = document.getElementById('machi-display');
+  if (!shantenEl || !machiEl) return;
+
+  if (!Settings.shantenEnabled || G.gamePhase === 'idle' || G.gamePhase === 'end') {
+    shantenEl.textContent = ''; machiEl.textContent = ''; return;
+  }
+
+  let p = G.players[0];
+  let handForCalc = p.hand.slice();
+  let sh;
+  if (handForCalc.length === 14 - p.melds.length * 3) {
+    let bestSh = 99;
+    for (let i = 0; i < handForCalc.length; i++) {
+      let test = handForCalc.filter((_, j) => j !== i);
+      let s = calcShanten(test, p.melds.length);
+      if (s < bestSh) bestSh = s;
+    }
+    sh = bestSh;
+  } else {
+    sh = calcShanten(handForCalc, p.melds.length);
+  }
+
+  shantenEl.classList.remove('tenpai', 'agari');
+
+  if (sh < 0 || isComplete(handForCalc, p.melds.length)) {
+    shantenEl.textContent = '和了'; shantenEl.classList.add('agari'); machiEl.textContent = '';
+  } else if (sh === 0) {
+    shantenEl.textContent = 'テンパイ'; shantenEl.classList.add('tenpai');
+    let waits;
+    if (handForCalc.length === 14 - p.melds.length * 3) {
+      let bestWaits = [];
+      for (let i = 0; i < handForCalc.length; i++) {
+        let test = handForCalc.filter((_, j) => j !== i);
+        if (calcShanten(test, p.melds.length) === 0) {
+          let w = getWaitingTiles(test, p.melds.length);
+          if (w.length > bestWaits.length) bestWaits = w;
+        }
+      }
+      waits = bestWaits;
+    } else {
+      waits = getWaitingTiles(handForCalc, p.melds.length);
+    }
+    machiEl.textContent = waits.length > 0 ? '待ち: ' + waits.map(w => tileDisplay(w)).join('') : '';
+  } else {
+    shantenEl.textContent = sh + '向聴'; machiEl.textContent = '';
+  }
+}
+
+function renderCenterPanel() {
+  const cp = document.getElementById('center-panel');
+  cp.innerHTML = '';
+  let windBig = document.createElement('div');
+  windBig.className = 'wind-big';
+  windBig.textContent = WIND_NAMES[G.roundWind];
+  cp.appendChild(windBig);
+
+  let oppIdx = getRelativePlayer(2);
+  let oppRow = document.createElement('div');
+  oppRow.className = 'cp-row' + (G.currentPlayer === oppIdx ? ' cp-active' : '');
+  oppRow.innerHTML = `<span class="cp-wind">${WIND_NAMES[G.players[oppIdx].seatWind]}</span><span class="cp-score">${G.players[oppIdx].score.toLocaleString()}</span>`;
+  cp.appendChild(oppRow);
+
+  let sidesRow = document.createElement('div');
+  sidesRow.style.display = 'flex'; sidesRow.style.justifyContent = 'space-between'; sidesRow.style.width = '100%';
+  let leftIdx = getRelativePlayer(3), rightIdx = getRelativePlayer(1);
+  let leftDiv = document.createElement('div');
+  leftDiv.className = 'cp-row' + (G.currentPlayer === leftIdx ? ' cp-active' : '');
+  leftDiv.innerHTML = `<span class="cp-wind">${WIND_NAMES[G.players[leftIdx].seatWind]}</span><span class="cp-score">${G.players[leftIdx].score.toLocaleString()}</span>`;
+  let rightDiv = document.createElement('div');
+  rightDiv.className = 'cp-row' + (G.currentPlayer === rightIdx ? ' cp-active' : '');
+  rightDiv.innerHTML = `<span class="cp-score">${G.players[rightIdx].score.toLocaleString()}</span><span class="cp-wind">${WIND_NAMES[G.players[rightIdx].seatWind]}</span>`;
+  sidesRow.appendChild(leftDiv); sidesRow.appendChild(rightDiv);
+  cp.appendChild(sidesRow);
+
+  let selfRow = document.createElement('div');
+  selfRow.className = 'cp-row' + (G.currentPlayer === 0 ? ' cp-active' : '');
+  selfRow.innerHTML = `<span class="cp-wind">${WIND_NAMES[G.players[0].seatWind]}</span><span class="cp-score">${G.players[0].score.toLocaleString()}</span>`;
+  cp.appendChild(selfRow);
+}
+
+function getRelativePlayer(offset) { return (0 + offset) % 4; }
+
+function renderOpponent() {
+  let oppIdx = getRelativePlayer(2);
+  let p = G.players[oppIdx];
+  document.getElementById('opp-name').textContent = p.name;
+  document.getElementById('opp-wind').textContent = WIND_NAMES[p.seatWind];
+  document.getElementById('opp-score').textContent = p.score.toLocaleString();
+  let tilesEl = document.getElementById('opp-tiles');
+  tilesEl.innerHTML = '';
+  for (let i = 0; i < p.hand.length; i++) {
+    let div = document.createElement('div'); div.className = 'opp-tile-back'; tilesEl.appendChild(div);
+  }
+  if (p.isRiichi) document.getElementById('opp-riichi').classList.remove('hidden');
+  else document.getElementById('opp-riichi').classList.add('hidden');
+}
+
+function renderSidePanels() {
+  renderSidePanel('left', getRelativePlayer(3));
+  renderSidePanel('right', getRelativePlayer(1));
+}
+
+function renderSidePanel(side, pidx) {
+  let p = G.players[pidx];
+  document.getElementById(side + '-name').textContent = p.name;
+  document.getElementById(side + '-wind').textContent = WIND_NAMES[p.seatWind];
+  document.getElementById(side + '-score').textContent = p.score.toLocaleString();
+  let tilesEl = document.getElementById(side + '-tiles');
+  tilesEl.innerHTML = '';
+  for (let i = 0; i < p.hand.length; i++) {
+    let div = document.createElement('div'); div.className = 'side-tile-back'; tilesEl.appendChild(div);
+  }
+  if (p.isRiichi) document.getElementById(side + '-riichi').classList.remove('hidden');
+  else document.getElementById(side + '-riichi').classList.add('hidden');
+}
+
+function renderDiscards() {
+  const areas = [
+    {id: 'discard-self', pidx: 0},
+    {id: 'discard-opp', pidx: getRelativePlayer(2)},
+    {id: 'discard-left', pidx: getRelativePlayer(3)},
+    {id: 'discard-right', pidx: getRelativePlayer(1)}
+  ];
+  for (const area of areas) {
+    let el = document.getElementById(area.id);
+    el.innerHTML = '';
+    let p = G.players[area.pidx];
+    for (let i = 0; i < p.discards.length; i++) {
+      let t = p.discards[i];
+      let div = document.createElement('div');
+      div.className = 'disc-tile normal';
+      if (t.red) div.classList.add('red-tile');
+      if (t.called) div.classList.add('called');
+      if (t.riichiMark) div.classList.add('riichi-mark');
+      let meta = G.discardMeta[area.pidx][i];
+      if (meta && meta.isTsumogiri && !t.called) div.classList.add('tsumogiri');
+      if (i === p.discards.length - 1 && area.pidx === G.lastDiscardPlayer) {
+        div.classList.add('latest');
+        if (Settings.effectsEnabled) div.classList.add('dealing');
+      }
+      div.textContent = tileDisplay(t);
+      div.style.color = tileColor(t);
+      div.setAttribute('aria-label', tileLabel(t));
+      el.appendChild(div);
+    }
+  }
+}
+
+function renderHand() {
+  const handArea = document.getElementById('hand-area');
+  handArea.innerHTML = '';
+  let p = G.players[0];
+
+  for (const m of p.melds) {
+    let meldDiv = document.createElement('div');
+    meldDiv.className = 'hand-meld';
+    if (m.type === 'ankan') {
+      for (let ti = 0; ti < m.tiles.length; ti++) {
+        let div = document.createElement('div');
+        div.className = 'meld-tile';
+        if (ti === 0 || ti === 3) div.classList.add('kan-back');
+        else { div.textContent = tileDisplay(m.tiles[ti]); div.style.color = tileColor(m.tiles[ti]); }
+        div.setAttribute('aria-label', tileLabel(m.tiles[ti]));
+        meldDiv.appendChild(div);
+      }
+    } else {
+      for (const t of m.tiles) {
+        let div = document.createElement('div');
+        div.className = 'meld-tile';
+        div.textContent = tileDisplay(t); div.style.color = tileColor(t);
+        div.setAttribute('aria-label', tileLabel(t));
+        meldDiv.appendChild(div);
+      }
+    }
+    handArea.appendChild(meldDiv);
+  }
+
+  let hand = p.hand.slice();
+  let hasTsumo = G.currentPlayer === 0 && G.gamePhase === 'discard' && hand.length === 14 - p.melds.length * 3;
+  if (hasTsumo) { let tsumo = hand.pop(); hand = sortHand(hand); hand.push(tsumo); }
+  else { hand = sortHand(hand); }
+
+  for (let i = 0; i < hand.length; i++) {
+    let t = hand[i];
+    let div = createTileElement(t, true, true);
+    if (hasTsumo && i === hand.length - 1) div.classList.add('tsumo-tile');
+    if (G.selectedTile === i) div.classList.add('selected');
+
+    const idx = i;
+    div.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!G.waitingForInput || G.currentPlayer !== 0 || G.gamePhase !== 'discard') return;
+      if (G.selectedTile === idx) {
+        let actualIdx;
+        if (hasTsumo) {
+          if (idx === hand.length - 1) actualIdx = p.hand.length - 1;
+          else actualIdx = p.hand.findIndex(ht => ht.id === hand[idx].id);
+        } else actualIdx = p.hand.findIndex(ht => ht.id === hand[idx].id);
+        if (actualIdx >= 0) playerDiscard(actualIdx);
+      } else { G.selectedTile = idx; renderHand(); }
+    });
+
+    div.draggable = true;
+    div.addEventListener('dragstart', (e) => {
+      if (!G.waitingForInput || G.currentPlayer !== 0 || G.gamePhase !== 'discard') { e.preventDefault(); return; }
+      e.dataTransfer.setData('text/plain', idx.toString());
+      e.dataTransfer.effectAllowed = 'move';
+      div.classList.add('dragging');
+      const ghost = document.getElementById('drag-ghost');
+      ghost.className = 'hand-tile';
+      ghost.style.cssText = 'width:42px;height:58px;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;position:fixed;top:-100px;left:-100px;z-index:200';
+      ghost.style.backgroundColor = t.red ? '#F5EDE0' : '#F0EBDB';
+      ghost.textContent = tileDisplay(t);
+      ghost.style.color = tileColor(t);
+      ghost.classList.remove('hidden');
+      e.dataTransfer.setDragImage(ghost, 21, 29);
+    });
+    div.addEventListener('dragend', () => { div.classList.remove('dragging'); document.getElementById('drag-ghost').classList.add('hidden'); });
+
+    handArea.appendChild(div);
+  }
+
+  const discardSelf = document.getElementById('discard-self');
+  const tableArea = document.getElementById('table-area');
+  function handleDrop(e) {
+    e.preventDefault();
+    const dragIdx = parseInt(e.dataTransfer.getData('text/plain'));
+    if (isNaN(dragIdx) || !G.waitingForInput || G.currentPlayer !== 0 || G.gamePhase !== 'discard') return;
+    let actualIdx;
+    if (hasTsumo) {
+      if (dragIdx === hand.length - 1) actualIdx = p.hand.length - 1;
+      else actualIdx = p.hand.findIndex(ht => ht.id === hand[dragIdx].id);
+    } else actualIdx = p.hand.findIndex(ht => ht.id === hand[dragIdx].id);
+    if (actualIdx >= 0) playerDiscard(actualIdx);
+  }
+  function handleDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+  tableArea.addEventListener('dragover', handleDragOver);
+  tableArea.addEventListener('drop', handleDrop);
+  discardSelf.addEventListener('dragover', handleDragOver);
+  discardSelf.addEventListener('drop', handleDrop);
+}
+
+function showRiichiLine(playerIdx) {
+  let lineId;
+  if (playerIdx === 0) lineId = 'riichi-line-self';
+  else if (playerIdx === getRelativePlayer(2)) lineId = 'riichi-line-opp';
+  else if (playerIdx === getRelativePlayer(3)) lineId = 'riichi-line-left';
+  else lineId = 'riichi-line-right';
+  document.getElementById(lineId).classList.add('active');
+}
+
+function showRiichiMark(playerIdx) {
+  if (playerIdx === getRelativePlayer(2)) document.getElementById('opp-riichi').classList.remove('hidden');
+  else if (playerIdx === getRelativePlayer(3)) document.getElementById('left-riichi').classList.remove('hidden');
+  else if (playerIdx === getRelativePlayer(1)) document.getElementById('right-riichi').classList.remove('hidden');
+}
+
+function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+// ===== GAME START =====
+function startGame() {
+  document.getElementById('title-screen').classList.add('hidden');
+  document.getElementById('game').classList.remove('hidden');
+  document.getElementById('result-screen').classList.add('hidden');
+  updateSoundIcon();
+  initGame();
+  startRound();
+  showTutorial();
+}
+
+function restartGame() {
+  document.getElementById('result-screen').classList.add('hidden');
+  document.getElementById('agari-overlay').classList.add('hidden');
+  document.getElementById('agari-overlay').classList.remove('show', 'tier-normal', 'tier-mangan', 'tier-yakuman');
+  stopGoldParticles();
+  initGame();
+  startRound();
+}
+
+// Init title stats on load
+updateTitleStats();
+
+// Register service worker for PWA if available
+if ('serviceWorker' in navigator) {
+  // No external SW file needed for basic PWA - manifest handles Add to Home Screen
+}
+</script>
+</body>
+</html>
